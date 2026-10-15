@@ -1,0 +1,32 @@
+{
+  "name": "event-discovery-pakistan",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "cms"
+  ],
+  "engines": {
+    "node": "^22.0.0 || ^24.0.0 || ^26.0.0"
+  },
+  "scripts": {
+    "dev": "npm run dev --workspace frontend",
+    "build": "npm run build --workspace frontend",
+    "start": "npm run start --workspace frontend",
+    "dev:cms": "npm run develop --workspace cms",
+    "build:cms": "npm run build --workspace cms",
+    "start:cms": "npm run start --workspace cms"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "esbuild@0.21.5": true,
+    "@swc/core@1.15.33": true
+  },
+  "devDependencies": {
+    "@strapi/plugin-graphql": "^5.56.0",
+    "@strapi/plugin-users-permissions": "^5.56.0",
+    "@strapi/provider-upload-cloudinary": "^5.56.0",
+    "@strapi/strapi": "^5.56.0",
+    "@swc/core": "1.15.33",
+    "@swc/core-win32-x64-msvc": "1.15.33"
+  }
+}

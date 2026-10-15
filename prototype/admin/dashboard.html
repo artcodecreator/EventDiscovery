@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EventDiscovery Pakistan Admin Control Center. Approve events, monitor RSVPs, manage community hosts and analytics.">
+    <meta name="author" content="EventDiscovery Pakistan Team">
+    <title>Admin Dashboard & Event Management | EventDiscovery Pakistan 🇵🇰</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom Prototype Styling -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+    <!-- Modern Header & Navbar -->
+    <header class="sticky-top modern-header bg-dark-glass">
+        <nav class="navbar navbar-expand-lg navbar-dark py-3">
+            <div class="container-fluid px-lg-5">
+                <!-- Brand / Logo -->
+                <a class="navbar-brand d-flex align-items-center gap-2" href="../index.html">
+                    <div class="brand-icon">
+                        <i class="fa-solid fa-bolt-lightning"></i>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <span class="fw-bold tracking-wide text-white fs-4 leading-none">
+                            Event<span class="text-primary-gradient">Discovery</span>
+                        </span>
+                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle py-0 px-1" style="font-size: 0.65rem; width: fit-content;">
+                            ADMIN PORTAL 🇵🇰
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Mobile Toggle Button -->
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navigation Links -->
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../events/index.html">
+                                <i class="fa-regular fa-compass me-1 text-primary-gradient"></i> Public Site
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../events/create.html">
+                                <i class="fa-solid fa-calendar-plus me-1 text-primary-gradient"></i> Submit Event
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Auth State Container -->
+                    <div id="navbarAuthArea" class="d-flex align-items-center gap-2 mt-2 mt-lg-0"></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Admin Title Bar -->
+    <div class="bg-dark text-white py-4 border-bottom border-dark">
+        <div class="container-fluid px-lg-5">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <div>
+                    <span class="admin-badge mb-2 d-inline-block">
+                        <i class="fa-solid fa-shield-halved me-1"></i> Super Admin Panel
+                    </span>
+                    <h1 class="h2 fw-bold mb-1">Platform Management & Approval Center</h1>
+                    <p class="text-muted small mb-0">Oversee event submissions, community approvals, ticket analytics, and user accounts across Pakistan.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="../events/create.html" class="btn btn-primary-gradient btn-sm rounded-pill px-3 py-2 fw-semibold">
+                        <i class="fa-solid fa-plus me-1"></i> Add New Event
+                    </a>
+                    <button type="button" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2" onclick="refreshAdminData()">
+                        <i class="fa-solid fa-rotate me-1"></i> Refresh Stats
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow-1 py-4">
+        <div class="container-fluid px-lg-5">
+
+            <!-- KPI Analytics Cards (FR-14) -->
+            <div class="row g-3 mb-4">
+                <div class="col-xl-3 col-sm-6">
+                    <div class="admin-card-stat">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-semibold text-uppercase">Total Events Listed</div>
+                                <h3 class="fw-bold mt-1 mb-0" id="statTotalEvents">0</h3>
+                                <div class="small text-success mt-1"><i class="fa-solid fa-arrow-trend-up me-1"></i> Active in Pakistan</div>
+                            </div>
+                            <div class="stat-icon-wrapper bg-primary-subtle text-primary">
+                                <i class="fa-solid fa-calendar-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <div class="admin-card-stat">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-semibold text-uppercase">Pending Approvals</div>
+                                <h3 class="fw-bold mt-1 mb-0 text-warning" id="statPendingApprovals">0</h3>
+                                <div class="small text-muted mt-1"><i class="fa-solid fa-clock me-1"></i> Awaiting Review</div>
+                            </div>
+                            <div class="stat-icon-wrapper bg-warning-subtle text-warning">
+                                <i class="fa-solid fa-hourglass-half"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <div class="admin-card-stat">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-semibold text-uppercase">Total RSVP Registrations</div>
+                                <h3 class="fw-bold mt-1 mb-0" id="statTotalRsvps">0</h3>
+                                <div class="small text-info mt-1"><i class="fa-solid fa-users me-1"></i> Verified Attendees</div>
+                            </div>
+                            <div class="stat-icon-wrapper bg-info-subtle text-info">
+                                <i class="fa-solid fa-ticket"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <div class="admin-card-stat">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-semibold text-uppercase">Estimated Pass Revenue</div>
+                                <h3 class="fw-bold mt-1 mb-0 text-success" id="statRevenue">Rs. 0</h3>
+                                <div class="small text-muted mt-1">Currency: PKR 🇵🇰</div>
+                            </div>
+                            <div class="stat-icon-wrapper bg-success-subtle text-success">
+                                <i class="fa-solid fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabbed Management Interface -->
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+                <div class="card-header bg-white border-bottom p-0">
+                    <ul class="nav nav-tabs border-0 px-3 pt-2" id="adminTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active fw-semibold text-dark py-3 px-4 border-0 border-bottom border-3 border-primary" id="approvals-tab" data-bs-toggle="tab" data-bs-target="#approvalsTabPane" type="button" role="tab">
+                                <i class="fa-solid fa-stamp me-2 text-warning"></i> Event Approval Workflow
+                                <span class="badge bg-warning text-dark ms-2 rounded-pill" id="badgePendingCount">0</span>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link fw-semibold text-muted py-3 px-4 border-0" id="events-tab" data-bs-toggle="tab" data-bs-target="#eventsTabPane" type="button" role="tab">
+                                <i class="fa-solid fa-list-check me-2 text-primary"></i> All Events Management
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link fw-semibold text-muted py-3 px-4 border-0" id="users-tab" data-bs-toggle="tab" data-bs-target="#usersTabPane" type="button" role="tab">
+                                <i class="fa-solid fa-users-gear me-2 text-info"></i> Registered Accounts
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card-body p-4 bg-white">
+                    <div class="tab-content" id="adminTabContent">
+                        
+                        <!-- TAB 1: Event Approvals (FR-11) -->
+                        <div class="tab-pane fade show active" id="approvalsTabPane" role="tabpanel">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h5 class="fw-bold mb-1">Submissions Requiring Review</h5>
+                                    <p class="text-muted small mb-0">Approve or reject public submissions before they appear in public listings.</p>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table-modern">
+                                    <thead>
+                                        <tr>
+                                            <th>Event</th>
+                                            <th>City & Venue</th>
+                                            <th>Date / Time</th>
+                                            <th>Access Model</th>
+                                            <th>Host / Organizer</th>
+                                            <th>Status</th>
+                                            <th class="text-end">Review Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="approvalsTableBody">
+                                        <!-- Dynamically generated -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- TAB 2: All Events Management (FR-10 & FR-13) -->
+                        <div class="tab-pane fade" id="eventsTabPane" role="tabpanel">
+                            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+                                <div>
+                                    <h5 class="fw-bold mb-1">Master Event Directory</h5>
+                                    <p class="text-muted small mb-0">Toggle featured status, inspect passes, and manage event lifecycles.</p>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <input type="text" class="form-control form-control-sm rounded-pill" id="adminSearchEvent" placeholder="Filter by title, city..." oninput="filterAdminEvents(this.value)">
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table-modern">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Banner & Title</th>
+                                            <th>Category</th>
+                                            <th>City</th>
+                                            <th>RSVPs</th>
+                                            <th>Featured (FR-13)</th>
+                                            <th>Status</th>
+                                            <th class="text-end">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="allEventsTableBody">
+                                        <!-- Dynamically generated -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- TAB 3: Registered Accounts -->
+                        <div class="tab-pane fade" id="usersTabPane" role="tabpanel">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h5 class="fw-bold mb-1">Community Members & Organizers</h5>
+                                    <p class="text-muted small mb-0">Manage roles and profiles across Pakistan.</p>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table-modern">
+                                    <thead>
+                                        <tr>
+                                            <th>User</th>
+                                            <th>Email Address</th>
+                                            <th>City</th>
+                                            <th>Phone</th>
+                                            <th>Role</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="usersTableBody">
+                                        <!-- Dynamically generated -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 border-top border-dark mt-auto">
+        <div class="container-fluid px-lg-5 text-center">
+            <p class="text-muted small mb-0">
+                &copy; 2026 EventDiscovery Pakistan. Admin Portal &bull; System Timezone: Asia/Karachi (PKT) 🇵🇰
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Prototype JS Modules -->
+    <script src="../js/prototype-data.js"></script>
+    <script src="../js/prototype-auth.js"></script>
+    <script src="../js/prototype-app.js"></script>
+
+    <script>
+        function refreshAdminData() {
+            renderKpis();
+            renderApprovalsTable();
+            renderAllEventsTable();
+            renderUsersTable();
+            showToast('Admin data refreshed.', 'info');
+        }
+
+        function renderKpis() {
+            const allEvents = PrototypeData.getAllEvents().filter(e => e.status !== 'deleted');
+            const pendingEvents = allEvents.filter(e => e.status === 'pending');
+            
+            let totalRsvps = 0;
+            let estRevenue = 0;
+
+            allEvents.forEach(e => {
+                const count = e.rsvp_count || 0;
+                totalRsvps += count;
+                if (!e.is_free && e.price) {
+                    estRevenue += (count * Number(e.price));
+                }
+            });
+
+            document.getElementById('statTotalEvents').textContent = allEvents.length;
+            document.getElementById('statPendingApprovals').textContent = pendingEvents.length;
+            document.getElementById('badgePendingCount').textContent = pendingEvents.length;
+            document.getElementById('statTotalRsvps').textContent = totalRsvps.toLocaleString();
+            document.getElementById('statRevenue').textContent = 'Rs. ' + estRevenue.toLocaleString();
+        }
+
+        function renderApprovalsTable() {
+            const allEvents = PrototypeData.getAllEvents().filter(e => e.status !== 'deleted');
+            const pending = allEvents.filter(e => e.status === 'pending');
+            const tbody = document.getElementById('approvalsTableBody');
+
+            if (pending.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">
+                            <i class="fa-solid fa-circle-check fa-3x text-success mb-2 d-block"></i>
+                            <h6 class="fw-bold text-dark">All Submissions Approved!</h6>
+                            <p class="small text-muted mb-0">There are no pending events waiting for review right now.</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            let html = '';
+            pending.forEach(ev => {
+                const price = ev.is_free ? '<span class="text-success fw-bold">Free</span>' : ('Rs. ' + Number(ev.price).toLocaleString());
+                html += `
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="${ev.image}" alt="${ev.title}" class="rounded-2 object-fit-cover" style="width: 44px; height: 44px;">
+                                <div>
+                                    <div class="fw-bold text-dark text-truncate" style="max-width: 220px;">${ev.title}</div>
+                                    <span class="badge" style="background-color: ${ev.category_color}; color:#fff; font-size: 0.65rem;">${ev.category_name}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="small fw-semibold text-dark">${ev.venue_name}</div>
+                            <div class="text-muted small">${ev.city}</div>
+                        </td>
+                        <td>
+                            <div class="small text-dark">${PrototypeApp.formatDate(ev.event_date)}</div>
+                            <div class="text-muted small">${PrototypeApp.formatTime(ev.start_time)} PKT</div>
+                        </td>
+                        <td>${price}</td>
+                        <td>
+                            <div class="small fw-semibold">${ev.organizer_name}</div>
+                            <div class="text-muted small">${ev.organizer_email}</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1">Pending</span>
+                        </td>
+                        <td class="text-end">
+                            <div class="d-flex gap-1 justify-content-end">
+                                <button type="button" class="btn btn-success btn-sm rounded-pill px-3" onclick="handleApprove(${ev.id})">
+                                    <i class="fa-solid fa-check me-1"></i> Approve
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-2" onclick="handleReject(${ev.id})">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function renderAllEventsTable(filterText = '') {
+            let allEvents = PrototypeData.getAllEvents().filter(e => e.status !== 'deleted');
+            if (filterText) {
+                const q = filterText.toLowerCase();
+                allEvents = allEvents.filter(e => e.title.toLowerCase().includes(q) || e.city.toLowerCase().includes(q));
+            }
+            const tbody = document.getElementById('allEventsTableBody');
+
+            let html = '';
+            allEvents.forEach(ev => {
+                const isFeatured = ev.is_featured === true;
+                const statusBadge = ev.status === 'pending' ?
+                    '<span class="badge bg-warning-subtle text-warning border border-warning-subtle">Pending</span>' :
+                    (ev.status === 'rejected' ? '<span class="badge bg-danger-subtle text-danger border border-danger-subtle">Rejected</span>' : '<span class="badge bg-success-subtle text-success border border-success-subtle">Approved</span>');
+
+                html += `
+                    <tr>
+                        <td class="text-muted small">#${ev.id}</td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="${ev.image}" alt="${ev.title}" class="rounded-2 object-fit-cover" style="width: 40px; height: 40px;">
+                                <div>
+                                    <a href="../events/detail.html?id=${ev.id}" target="_blank" class="fw-bold text-dark text-decoration-none hover-primary text-truncate d-block" style="max-width: 240px;">
+                                        ${ev.title}
+                                    </a>
+                                    <div class="text-muted small">${ev.venue_name}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge" style="background-color: ${ev.category_color}; color:#fff; font-size: 0.65rem;">${ev.category_name}</span></td>
+                        <td><span class="badge bg-light text-dark border">${ev.city}</span></td>
+                        <td><span class="fw-bold text-primary">${ev.rsvp_count || 0}</span></td>
+                        <td>
+                            <button type="button" class="btn btn-sm ${isFeatured ? 'btn-warning text-dark' : 'btn-outline-secondary'} rounded-pill px-2 py-1" style="font-size: 0.75rem;" onclick="handleToggleFeatured(${ev.id})">
+                                <i class="fa-solid ${isFeatured ? 'fa-star' : 'fa-star-half-stroke'} me-1"></i> ${isFeatured ? 'Featured' : 'Standard'}
+                            </button>
+                        </td>
+                        <td>${statusBadge}</td>
+                        <td class="text-end">
+                            <div class="d-flex gap-1 justify-content-end">
+                                <a href="../events/detail.html?id=${ev.id}" class="btn btn-light btn-sm rounded-circle" title="View Public Page">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                                <button type="button" class="btn btn-outline-danger btn-sm rounded-circle" title="Delete Event" onclick="handleDeleteEvent(${ev.id})">
+                                    <i class="fa-regular fa-trash-can"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function filterAdminEvents(text) {
+            renderAllEventsTable(text);
+        }
+
+        function renderUsersTable() {
+            const demoUsers = PrototypeAuth.DEMO_USERS;
+            const customUsers = PrototypeAuth.getCustomUsers();
+            const allUsers = [...demoUsers, ...customUsers];
+            const tbody = document.getElementById('usersTableBody');
+
+            let html = '';
+            allUsers.forEach(u => {
+                html += `
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="${u.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'}" alt="${u.name}" class="rounded-circle" style="width:36px; height:36px; object-fit:cover;">
+                                <div class="fw-semibold text-dark">${u.name}</div>
+                            </div>
+                        </td>
+                        <td class="text-muted small">${u.email}</td>
+                        <td><span class="badge bg-light text-dark border">${u.city || 'Lahore'}</span></td>
+                        <td class="text-muted small">${u.phone || '+92 300 0000000'}</td>
+                        <td>
+                            <span class="badge ${u.role === 'admin' ? 'bg-danger-subtle text-danger border border-danger-subtle' : 'bg-primary-subtle text-primary border border-primary-subtle'}">
+                                ${(u.role || 'USER').toUpperCase()}
+                            </span>
+                        </td>
+                        <td><span class="badge bg-success-subtle text-success border border-success-subtle">Active</span></td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function handleApprove(id) {
+            PrototypeData.updateEventStatus(id, 'approved');
+            showToast('Event approved! It is now live in public search and discovery.', 'success');
+            refreshAdminData();
+        }
+
+        function handleReject(id) {
+            PrototypeData.updateEventStatus(id, 'rejected');
+            showToast('Event submission marked as rejected.', 'warning');
+            refreshAdminData();
+        }
+
+        function handleToggleFeatured(id) {
+            const isFeatured = PrototypeData.toggleFeatured(id);
+            showToast(isFeatured ? 'Event marked as FEATURED on homepage.' : 'Event removed from featured.', 'info');
+            refreshAdminData();
+        }
+
+        function handleDeleteEvent(id) {
+            if (confirm('Are you sure you want to remove this event from EventDiscovery Pakistan?')) {
+                PrototypeData.deleteEvent(id);
+                showToast('Event deleted.', 'danger');
+                refreshAdminData();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            PrototypeApp.init('../');
+            refreshAdminData();
+        });
+    </script>
+</body>
+</html>

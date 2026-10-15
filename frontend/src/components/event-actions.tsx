@@ -1,0 +1,12 @@
+"use client";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+export function EventActions({documentId,slug}:{documentId?:string;slug:string}){
+ const {data:session,status}=useSession();const [rsvpd,setRsvpd]=useState(false),[favorite,setFavorite]=useState(false),[busy,setBusy]=useState(false),[message,setMessage]=useState("");
+ useEffect(()=>{if(!session?.user)return;Promise.all([fetch("/api/rsvps/me").then(r=>r.json()),fetch("/api/favorites/me").then(r=>r.json())]).then(([r,f])=>{setRsvpd((r.data??[]).some((x:any)=>(x.event?.documentId??x.event?.id)===documentId));setFavorite((f.data??[]).some((x:any)=>(x.event?.documentId??x.event?.id)===documentId));}).catch(()=>{});},[session,documentId]);
+ async function act(path:string,method="POST"){if(!documentId){setMessage("Sign-in actions become available after the CMS is configured.");return;}setBusy(true);setMessage("");try{const response=await fetch(path,{method,headers:{"Content-Type":"application/json"},body:JSON.stringify({eventDocumentId:documentId})});const data=await response.json();if(!response.ok)throw new Error(data.error?.message??data.error??data.message??"Please try again.");if(path.includes("rsvps"))setRsvpd(method==="POST");else setFavorite(Boolean(data.isFavorite));setMessage(path.includes("rsvps")?(method==="POST"?"You’re registered for this event.":"Your RSVP was cancelled."):(data.isFavorite?"Saved to your favorites.":"Removed from your favorites."));}catch(e){setMessage(e instanceof Error?e.message:"Could not complete your request.");}finally{setBusy(false);}}
+ if(status==="loading")return <div className="text-center small text-secondary">Checking your account…</div>;
+ if(!session?.user)return <Link href={`/login?next=${encodeURIComponent("/events/"+slug)}`} className="btn btn-primary btn-lg rounded-pill w-100">Sign in to RSVP</Link>;
+ return <div className="d-grid gap-2"><button disabled={busy} onClick={()=>act("/api/rsvps",rsvpd?"DELETE":"POST")} className="btn btn-primary btn-lg rounded-pill">{rsvpd?"Cancel RSVP":"RSVP for this event"}</button><button disabled={busy} onClick={()=>act("/api/favorites")} className="btn btn-outline-primary rounded-pill"><i className={favorite?"fa-solid fa-heart me-2":"fa-regular fa-heart me-2"}/>{favorite?"Saved to favorites":"Save event"}</button>{message&&<small className="text-secondary" role="status">{message}</small>}</div>;
+}

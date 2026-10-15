@@ -1,0 +1,637 @@
+
+
+Event Discovery & Community Engagement Platform
+Software Requirements Specification
+
+Version 1.0
+
+  
+
+
+
+
+
+ 
+
+Group Id: S26PROJECT69E8B
+Supervisor Name : Amjad Iqbal Khan
+
+
+
+
+
+
+
+
+
+Revision History
+
+
+Date (dd/mm/yyyy)
+
+
+Version
+
+
+Description
+
+
+Author
+
+
+Mon 23 May, 2026
+
+
+1.0
+
+
+This document contains
+
+
+bc210403836
+
+
+
+
+
+
+
+
+Introduction of SRS documents
+
+
+
+
+
+
+
+
+
+
+
+Scope of Project
+
+
+
+
+
+
+
+
+
+
+
+FR & NFR
+
+
+
+
+
+
+
+
+
+
+
+Use Case Diagram
+
+
+
+
+
+
+
+
+
+
+
+Usage Scenarios
+
+
+
+
+
+
+
+
+
+
+
+Adopted Methodology
+
+
+
+
+
+
+
+
+
+
+
+Work Plan
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Table of Contents
+
+
+Contents
+ TOC \o "1-3" \h \z \u Introduction: PAGEREF _Toc230471632 \h 4
+Scope of Project: PAGEREF _Toc230471633 \h 4
+In-Scope Features PAGEREF _Toc230471634 \h 4
+Out-of-Scope Features PAGEREF _Toc230471635 \h 4
+User Features (Guest & Registered Users) PAGEREF _Toc230471636 \h 5
+Admin Features PAGEREF _Toc230471637 \h 5
+Functional and Non Functional Requirements: PAGEREF _Toc230471638 \h 5
+Functional Requirements (FR) PAGEREF _Toc230471639 \h 5
+Non-Functional Requirements (NFR) PAGEREF _Toc230471640 \h 6
+Use Case Diagram(s): PAGEREF _Toc230471641 \h 6
+Usage Scenarios: PAGEREF _Toc230471642 \h 7
+Adopted Methodology PAGEREF _Toc230471643 \h 8
+VU Process Model: PAGEREF _Toc230471644 \h 9
+Phases of VU Process Model PAGEREF _Toc230471645 \h 9
+1. Feasibility Study PAGEREF _Toc230471646 \h 9
+2. Requirements Definition PAGEREF _Toc230471647 \h 9
+3. System Design PAGEREF _Toc230471648 \h 9
+4. Implementation PAGEREF _Toc230471649 \h 9
+5. Testing PAGEREF _Toc230471650 \h 9
+6. Deployment PAGEREF _Toc230471651 \h 9
+7. Maintenance PAGEREF _Toc230471652 \h 10
+Waterfall model: PAGEREF _Toc230471653 \h 10
+Work Plan PAGEREF _Toc230471654 \h 11
+
+
+
+
+
+
+
+SRS Document
+
+Introduction:The Event Discovery & Community Engagement Platform is a comprehensive web-based application developed to help users discover, explore, and participate in local and online events efficiently. The platform serves multiple user roles including Guest Users, Registered Users, Event Organizers, and Administrators by providing a centralized system for event discovery, registration, management, and community interaction.
+The system integrates modern technologies such as interactive maps, responsive interfaces, event categorization, user authentication, and content management systems to provide a seamless user experience. Users can search events by category, location, date, and organizer while administrators can manage events, users, approvals, and analytics through a dedicated dashboard.
+This project demonstrates modern software engineering principles including MVC architecture, RESTful APIs, role-based access control, responsive web design, secure authentication, cloud storage integration, and scalable system architecture. 
+Scope of Project:
+The system will support three primary user roles:
+Guest Users – Browse events, search and filter events, and view event details. 
+Registered Users – RSVP for events, save favorites, submit reviews, and manage profiles. 
+Administrators – Manage users, approve events, manage categories, and oversee the platform. 
+In-Scope Features
+Interactive event map using Leaflet.js / Google Maps API 
+Event search and category-based filtering 
+Event detail pages with images and venue information 
+User registration and authentication 
+RSVP and event registration system 
+Favorite/bookmark management 
+Reviews and ratings system 
+Admin dashboard for event and user management 
+Responsive web interface 
+Featured events management 
+Notification system 
+REST API / GraphQL integration 
+Out-of-Scope Features
+Native Mobile Application Development 
+Online payment gateway integration 
+Live event streaming 
+Offline event management 
+AI-powered recommendations 
+Multi-language support
+User Features (Guest & Registered Users)
+User registration and login 
+Browse and search events 
+Filter events by category, date, and location 
+RSVP and registration system 
+Save favorite events 
+View event history 
+Submit ratings and reviews 
+Responsive mobile-friendly experience 
+Receive event notifications 
+Admin Features
+Manage all events 
+Approve or reject submitted events 
+Manage users and permissions 
+Manage categories and featured events 
+Moderate reviews and content 
+View reports and analytics 
+Manage system settings
+Functional and Non Functional Requirements:
+Functional Requirements (FR)
+
+FR ID
+Category
+Description
+
+FR-1
+
+User Registration
+
+Users can create accounts using email and password.
+FR-2
+User Login
+Registered users can securely log in.
+
+FR-3
+
+Profile Management
+
+Users can update profile information and passwords.
+FR-4
+Interactive Map
+System displays events on an interactive map.
+
+FR-5
+
+Event Search
+
+Users can search events using keywords and filters.
+FR-6
+Event Details
+System displays complete event information.
+
+FR-7
+
+RSVP Registration
+
+Registered users can RSVP for events.
+FR-8
+Favorites Management
+Users can bookmark favorite events.
+
+FR-9
+
+Reviews & Ratings
+
+Users can submit reviews and ratings.
+FR-10
+Event Management
+Admin can create, edit, and delete events.
+
+FR-11
+
+Event Approval
+
+Admin can approve or reject submitted events.
+FR-12
+Notifications
+Users receive notifications for event updates.
+
+FR-13
+
+Featured Events
+
+Admin can manage featured events section.
+FR-14
+Reports & Analytics
+Admin can generate reports and analytics.
+
+
+
+Non-Functional Requirements (NFR)
+
+NFR ID
+Category
+Description
+
+NFR-1
+
+Usability
+
+System shall provide intuitive and responsive UI/UX.
+NFR-2
+Performance
+Page load time should be under 3 seconds.
+
+NFR-3
+
+Security
+
+System shall use JWT authentication and encrypted passwords.
+NFR-4
+Scalability
+System shall support increasing users and events.
+
+NFR-5
+
+Reliability
+
+System shall minimize crashes and failures.
+NFR-6
+Maintainability
+Modular code structure for easier updates.
+
+NFR-7
+
+Cross-Browser Support
+
+Compatible with Chrome, Firefox, Edge, and Safari.
+NFR-8
+Availability
+System available 24/7 with minimal downtime.
+
+NFR-9
+
+Accessibility
+
+Mobile-friendly and accessible design standards.
+Use Case Diagram(s):
+
+
+Usage Scenarios:
+
+Use Case Title
+Register User
+
+Use Case Id
+
+USER-01
+Actors
+Guest User
+
+Description
+
+Users create an account to access the system.
+Pre-condition
+User not logged in
+
+Sequence Of Actions
+
+1. Click Register 2. Enter details 3. Submit form
+Post-condition
+Account successfully created
+
+Exceptions
+
+Invalid email, duplicate account
+
+
+Use Case Title
+Login
+
+Use Case Id
+
+LOGIN-01
+Actors
+Registered User
+
+Description
+
+Users log into the system securely.
+Pre-condition
+Account exists
+
+Sequence Of Actions
+
+1. Enter credentials 2. Click Login
+Post-condition
+User logged in
+
+Exceptions
+
+Invalid credentials
+
+
+Use Case Title
+Search Events
+
+Use Case Id
+
+EVT-01
+Actors
+Guest User / Registered User
+
+Description
+
+Users search events using keywords and filters.
+Pre-condition
+System available
+
+Sequence Of Actions
+
+1. Enter keyword 2. Apply filters 3. View results
+Post-condition
+Matching events displayed
+
+Exceptions
+
+No results found
+
+
+Use Case Title
+RSVP Event
+
+Use Case Id
+
+RSVP-01
+Actors
+Registered User
+
+Description
+
+Users register for events through RSVP functionality.
+Pre-condition
+User logged in
+
+Sequence Of Actions
+
+1. Open event 2. Click RSVP 3. Confirm registration
+Post-condition
+RSVP successfully stored
+
+Exceptions
+
+Event full, duplicate registration
+
+
+Use Case Title
+Submit Review
+
+Use Case Id
+
+REV-01
+Actors
+Registered User
+
+Description
+
+Users submit ratings and reviews for attended events.
+Pre-condition
+Event attended
+
+Sequence Of Actions
+
+1. Open attended event 2. Submit review 3. Save feedback
+Post-condition
+Review successfully submitted
+
+Exceptions
+
+Invalid rating
+
+
+Use Case Title
+Manage Events
+
+Use Case Id
+
+ADM-01
+Actors
+Admin
+
+Description
+
+Admin manages all event records.
+Pre-condition
+Admin logged in
+
+Sequence Of Actions
+
+1. Open dashboard 2. Edit/Create/Delete event
+Post-condition
+Event updated
+
+Exceptions
+
+Missing required data
+
+
+Use Case Title
+Approve Event
+
+Use Case Id
+
+ADM-02
+Actors
+Admin
+
+Description
+
+Admin approves or rejects user-submitted events.
+Pre-condition
+Pending event exists
+
+Sequence Of Actions
+
+1. Review submission 2. Approve/Reject
+Post-condition
+Event status updated
+
+Exceptions
+
+Invalid submission
+
+
+Use Case Title
+Manage Categories
+
+Use Case Id
+
+ADM-03
+Actors
+Admin
+
+Description
+
+Admin manages event categories.
+Pre-condition
+Admin authenticated
+
+Sequence Of Actions
+
+1. Add/Edit/Delete category
+Post-condition
+Categories updated
+
+Exceptions
+
+Duplicate category
+
+Adopted Methodology
+As per project requirements, the adopted methodology is the VU Process Model.
+The VU Process Model is a hybrid software development methodology combining features of:
+Waterfall Model 
+Spiral Model 
+This methodology provides structured development phases with iterative improvements and continuous risk analysis.
+VU Process Model:
+The VU Process Model combines the sequential structure of the waterfall model with the flexibility and risk management approach of the spiral model. It ensures proper planning, analysis, development, testing, deployment, and maintenance throughout the software development lifecycle.
+Phases of VU Process Model
+1. Feasibility Study
+Analyze technical and operational feasibility 
+Identify system requirements 
+Conduct cost-benefit analysis 
+2. Requirements Definition
+Gather system requirements 
+Prepare Software Requirements Specification (SRS) 
+Conduct stakeholder meetings 
+3. System Design
+Design system architecture 
+Prepare database structure 
+Create UI/UX wireframes 
+4. Implementation
+Develop frontend modules 
+Develop backend APIs 
+Integrate authentication and database systems 
+5. Testing
+Unit testing 
+Integration testing 
+System testing 
+Bug fixing 
+6. Deployment
+Deploy application to production server 
+Configure hosting environment 
+Final deployment verification 
+7. Maintenance
+Bug fixes 
+Feature updates 
+Performance optimization 
+Waterfall model:
+The Waterfall Model is a linear software development methodology where each phase is completed before moving to the next phase. It includes requirement analysis, design, implementation, testing, deployment, and maintenance. This model ensures proper documentation, structured planning, and organized project management.
+
+
+
+Spiral model:
+The Spiral Model is a software development approach that combines the features of the Waterfall Model and prototyping. It focuses on repeating the development process in cycles, called spirals, to gradually build the final product.
+Each spiral includes four main steps: planning, risk analysis, development, and review. This model is useful for large or high-risk projects because it allows for continuous feedback, early risk detection, and changes to requirements at any stage.
+
+
+
+
+
+
+Work Plan
+
+
+

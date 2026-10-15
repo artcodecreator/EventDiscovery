@@ -1,0 +1,139 @@
+# ==============================================================================
+# EVENT DISCOVERY & COMMUNITY ENGAGEMENT PLATFORM 🇵🇰
+# ==============================================================================
+# Project Title       : Event Discovery & Community Engagement Platform
+# Academic Group ID   : S26PROJECT69E8B
+# Student / Author    : bc210403836
+# Supervisor          : Amjad Iqbal Khan
+# Project Version     : 1.0.0 (Production / Viva Ready)
+# Specification Ref   : Software Requirements Specification (SRS) & System Architecture
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. SYSTEM & ENVIRONMENT PREREQUISITES
+# ------------------------------------------------------------------------------
+# Operating System    : Windows 10/11, macOS, or Linux (Ubuntu 22.04+)
+# Node.js Runtime     : v20.x LTS or v22.x LTS (Node v20.0.0+ required)
+# Package Manager     : npm v10.x or yarn v1.22+
+# Database Engine     : MySQL / MariaDB (XAMPP Server v8.0+) or SQLite / PostgreSQL
+# Local Web Server    : XAMPP (Apache + MySQL) on default port 3306
+# Frontend Server     : Next.js 16 Development Server (Default Port: 3000 / 3001)
+# CMS Backend Server  : Strapi 5 Headless CMS Engine (Default Port: 1337)
+# Browser Support     : Google Chrome, Microsoft Edge, Mozilla Firefox, Apple Safari
+
+# ------------------------------------------------------------------------------
+# 2. SOFTWARE REQUIREMENTS SPECIFICATION - FUNCTIONAL REQUIREMENTS (FR)
+# ------------------------------------------------------------------------------
+# FR-01: Interactive Geo-Location Map
+#   - Leaflet.js 1.9 interactive map with OpenStreetMap tiles.
+#   - Category-colored pin markers across major Pakistani cities.
+#   - Interactive pan, zoom, click popup previews, and card-to-map synchronization.
+#
+# FR-02: Responsive Events Catalog & View Switcher
+#   - Dual viewing modes: Split Map & List View and Card Grid View.
+#   - Cards display event title, category badge, banner image, date/time in PKT,
+#     PKR pricing, venue location, and quick action buttons.
+#
+# FR-03: Category-Based Filtering
+#   - Multi-category filtering across 7 core verticals:
+#     Music, Sports, Technology, Art & Culture, Food & Drink, Health & Wellness, Community Service.
+#   - Real-time dynamic updates of both event list and interactive map pins.
+#
+# FR-04: Event Detail Page & Venue Navigation
+#   - Dedicated event page with high-resolution image gallery.
+#   - Detailed schedule, organizer credentials, venue address, and ticket counter.
+#   - Interactive venue map with 1-click Google Maps GPS navigation link.
+#
+# FR-05: User Registration & Authentication
+#   - Secure account registration with Full Name, Email, Password, City, and Phone.
+#   - NextAuth.js JWT-based session management and password encryption.
+#   - Role-based access control (RBAC) separating Attendees and Super Administrators.
+#
+# FR-06: Digital RSVP Pass Wallet & QR Ticketing
+#   - 1-Click RSVP pass reservation for authenticated users.
+#   - Automated generation of unique passcodes (e.g. PK-PASS-...) and QR admission tickets.
+#   - Dedicated Pass Wallet modal with full pass details and print pass functionality.
+#
+# FR-07: Favorites & Bookmarking Engine
+#   - 1-Click bookmarking from event cards or detail pages.
+#   - Persistent saved events synchronized to user dashboard with 1-click removal.
+#
+# FR-08: Community Reviews & Star Ratings
+#   - 5-Star interactive rating system and community reviews.
+#   - Review submission form with client-side and server-side validation.
+#
+# FR-09: Community Event Proposal & Submission Form
+#   - 5-Section comprehensive submission form (Basic Info, Schedule/Pricing, Venue, Banner, Contact).
+#   - Validation and automatic queueing into Admin Moderation pipeline.
+#
+# FR-10: Super Administrator Management Portal
+#   - Dedicated Admin Dashboard at /admin/dashboard.
+#   - KPI analytics cards: Total Events Listed, Pending Approvals, Total RSVPs, Revenue in PKR.
+#   - Tab 1: Event Approval/Rejection moderation queue.
+#   - Tab 2: Master Event Directory with search, featured toggle, and delete actions.
+#   - Tab 3: Registered Community Accounts directory.
+#
+# FR-11: Featured Events Management
+#   - Super Admin can mark or unmark events as "Featured".
+#   - Curated Featured Events grid prominently displayed on the homepage.
+#
+# FR-12: Multi-Attribute Search & Live Filtering
+#   - Live keyword search across title, description, venue, and organizer.
+#   - City filter (Lahore, Karachi, Islamabad, Rawalpindi, Peshawar, Faisalabad, Multan, Quetta).
+#   - Sort options: Upcoming date, Furthest date, Most Popular/RSVPs, Alphabetical (A-Z).
+#
+# FR-13: User Dashboard & Profile Management
+#   - Centralized Attendee Hub at /dashboard.
+#   - Manage active passes, bookmarks, activity timeline, and profile settings.
+#
+# FR-14: Dual-Mode Resilient Fallback Architecture
+#   - Seamless hybrid data layer: auto-connects to Strapi 5 CMS REST API when available,
+#     and automatically fails over to in-memory local data store when offline.
+
+# ------------------------------------------------------------------------------
+# 3. NON-FUNCTIONAL REQUIREMENTS (NFR)
+# ------------------------------------------------------------------------------
+# NFR-01: Usability & UX       - Responsive modern UI built with Tailwind CSS & Bootstrap 5.
+# NFR-02: Performance         - Initial page load time under 3 seconds using Next.js Server Components.
+# NFR-03: Security            - JWT session tokens, bcrypt password hashing, Zod schema validation.
+# NFR-04: Scalability         - Decoupled headless architecture ready for high concurrent traffic.
+# NFR-05: Reliability         - Zero-downtime dual-mode fallback preventing application crashes.
+# NFR-06: Maintainability     - Modular TypeScript codebase with clean separation of concerns.
+# NFR-07: Cross-Browser       - Full compatibility across modern desktop and mobile browsers.
+# NFR-08: Availability        - High uptime with client-side state resilience.
+# NFR-09: Accessibility       - Semantic HTML5 structure, accessible forms, and color contrast.
+
+# ------------------------------------------------------------------------------
+# 4. CORE APPLICATION DEPENDENCIES (NODE.JS / JAVASCRIPT ECOSYSTEM)
+# ------------------------------------------------------------------------------
+# Below are the primary NPM packages and versions used in this project:
+#
+# Frontend (@event-discovery/frontend):
+#   - next@^16.0.0
+#   - react@^19.2.0
+#   - react-dom@^19.2.0
+#   - next-auth@5.0.0-beta.32
+#   - tailwindcss@^4.1.0
+#   - bootstrap@^5.3.3
+#   - leaflet@^1.9.4
+#   - lucide-react@^0.468.0
+#   - zod@^3.24.0
+#   - typescript@^5.7.0
+#
+# Backend CMS (@event-discovery/cms):
+#   - @strapi/strapi@^5.56.0
+#   - @strapi/plugin-users-permissions@^5.56.0
+#   - @strapi/plugin-graphql@^5.56.0
+#   - mysql2@^3.12.0
+#   - pg@^8.13.0
+
+# ------------------------------------------------------------------------------
+# 5. OPTIONAL AUTOMATION, VERIFICATION & TESTING DEPENDENCIES (PYTHON / PIP)
+# ------------------------------------------------------------------------------
+# If automated testing, API validation, or evaluator scripts are executed via pip,
+# the following packages provide HTTP client, test automation, and environment tools:
+
+requests>=2.31.0
+pytest>=8.0.0
+python-dotenv>=1.0.0
+urllib3>=2.0.0

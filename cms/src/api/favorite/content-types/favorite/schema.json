@@ -1,0 +1,1 @@
+{"collectionName":"favorites","info":{"singularName":"favorite","pluralName":"favorites","displayName":"Saved Event"},"options":{"draftAndPublish":false},"attributes":{"user":{"type":"relation","relation":"manyToOne","target":"plugin::users-permissions.user"},"event":{"type":"relation","relation":"manyToOne","target":"api::event.event"}}}

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sign in to your EventDiscovery Pakistan account to RSVP for events, manage digital passes, and access your community dashboard.">
+    <meta name="author" content="EventDiscovery Pakistan Team">
+    <title>Sign In | EventDiscovery Pakistan 🇵🇰</title>
+
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Custom Prototype Styling -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+    <!-- Standard Modern Header & Navbar -->
+    <header class="sticky-top modern-header bg-dark-glass">
+        <nav class="navbar navbar-expand-lg navbar-dark py-3">
+            <div class="container">
+                <!-- Brand / Logo -->
+                <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="../index.html">
+                    <div class="brand-icon">
+                        <i class="fa-solid fa-bolt-lightning"></i>
+                    </div>
+                    <span>Event<span class="text-primary-gradient">Discovery</span> <span class="badge bg-success-subtle text-success border border-success-subtle py-1 px-2" style="font-size: 0.65rem;">PAKISTAN 🇵🇰</span></span>
+                </a>
+
+                <!-- Mobile Toggle Button -->
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navigation Links -->
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../events/index.html">
+                                <i class="fa-regular fa-compass me-1 text-primary-gradient"></i> Explore Events
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../categories/index.html">
+                                <i class="fa-solid fa-layer-group me-1 text-primary-gradient"></i> Categories
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../events/index.html?view=split">
+                                <i class="fa-solid fa-map-location-dot me-1 text-primary-gradient"></i> Live Geo-Map
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Auth State Container -->
+                    <div id="navbarAuthArea" class="d-flex align-items-center gap-2 mt-2 mt-lg-0"></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Title Header -->
+    <div class="bg-dark text-white py-4 border-bottom border-dark">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-2 small text-muted">
+                    <li class="breadcrumb-item"><a href="../index.html" class="text-muted text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item active text-primary" aria-current="page">Account Sign In</li>
+                </ol>
+            </nav>
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <div>
+                    <h1 class="h2 fw-bold mb-1">Welcome Back to EventDiscovery 🇵🇰</h1>
+                    <p class="text-muted small mb-0">Sign in to manage your digital event passes, favorites, and community interactions.</p>
+                </div>
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill fw-semibold">
+                    <i class="fa-solid fa-shield-halved me-1"></i> Verified Local Session
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1 py-5">
+        <div class="container">
+            <div class="row justify-content-center align-items-center g-4">
+                
+                <!-- Left Column: Platform Branding & Community Perks -->
+                <div class="col-lg-5 d-none d-lg-block">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 text-white position-relative overflow-hidden h-100" style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);">
+                        <div class="mb-4">
+                            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1 rounded-pill fw-bold mb-3">
+                                <i class="fa-solid fa-bolt me-1"></i> Pakistan Community Network
+                            </span>
+                            <h3 class="fw-bold mb-2">Connect with What's Happening in Your City</h3>
+                            <p class="text-muted small">Access exclusive community passes for events in Lahore, Karachi, Islamabad, Peshawar and beyond.</p>
+                        </div>
+
+                        <div class="d-flex flex-column gap-3 mb-4">
+                            <div class="d-flex align-items-center gap-3 p-3 bg-dark rounded-3 border border-dark">
+                                <div class="brand-icon" style="width: 40px; height: 40px; font-size: 1rem; flex-shrink: 0;">
+                                    <i class="fa-solid fa-qrcode"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-white small">Digital Pass Wallet</div>
+                                    <div class="text-muted small">Instant QR ticket passes for smooth venue admission</div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-3 p-3 bg-dark rounded-3 border border-dark">
+                                <div class="brand-icon" style="width: 40px; height: 40px; font-size: 1rem; flex-shrink: 0;">
+                                    <i class="fa-solid fa-map-location-dot"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-white small">Interactive Geo-Map</div>
+                                    <div class="text-muted small">Discover concerts, hackathons, and cultural fests near you</div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-3 p-3 bg-dark rounded-3 border border-dark">
+                                <div class="brand-icon" style="width: 40px; height: 40px; font-size: 1rem; flex-shrink: 0;">
+                                    <i class="fa-solid fa-heart"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-white small">Bookmarks & Alerts</div>
+                                    <div class="text-muted small">Save your favorite events and stay updated on schedule changes</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-top border-dark small text-muted">
+                            New to EventDiscovery? <a href="register.html" class="text-primary text-decoration-none fw-semibold">Create Free Account <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Sign In Card -->
+                <div class="col-lg-6 col-md-10">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
+                        
+                        <div class="mb-4">
+                            <h3 class="fw-bold text-dark mb-1">Sign In to Your Account</h3>
+                            <p class="text-muted small mb-0">Enter your registered email and password to access your dashboard.</p>
+                        </div>
+
+                        <!-- 1-Click Demo Accounts Box -->
+                        <div class="p-3 bg-light rounded-3 border mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-bold small text-dark"><i class="fa-solid fa-flask text-primary me-1"></i> Quick Demo Accounts</span>
+                                <span class="badge bg-secondary-subtle text-secondary small">Prototype</span>
+                            </div>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3" id="demoUserBtn">
+                                    <i class="fa-solid fa-user me-1"></i> User: Ahmed Khan
+                                </button>
+                                <button type="button" class="btn btn-outline-warning text-dark btn-sm rounded-pill px-3" id="demoAdminBtn">
+                                    <i class="fa-solid fa-shield-halved me-1 text-warning"></i> Admin Portal
+                                </button>
+                            </div>
+                            <div class="text-muted mt-2" style="font-size: 0.75rem;">
+                                Demo Password: <code class="text-dark fw-bold">Demo@1234</code> (click either button to auto-fill)
+                            </div>
+                        </div>
+
+                        <!-- Login Form -->
+                        <form id="loginForm" novalidate>
+                            <div class="mb-3">
+                                <label for="loginEmail" class="form-label small fw-semibold text-muted">
+                                    <i class="fa-regular fa-envelope me-1 text-primary"></i> Email Address <span class="text-danger">*</span>
+                                </label>
+                                <input type="email" class="form-control rounded-3 p-2" id="loginEmail" name="email" placeholder="e.g., ahmed.khan@eventdiscovery.pk" autocomplete="email" required>
+                                <div class="invalid-feedback">Please enter a valid email address.</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <label for="loginPassword" class="form-label small fw-semibold text-muted mb-0">
+                                        <i class="fa-solid fa-lock me-1 text-primary"></i> Password <span class="text-danger">*</span>
+                                    </label>
+                                    <a href="#" class="text-primary small text-decoration-none" onclick="showToast('Password reset link simulated for prototype.', 'info')">Forgot Password?</a>
+                                </div>
+                                <div class="input-group">
+                                    <input type="password" class="form-control rounded-start-3 p-2" id="loginPassword" name="password" placeholder="••••••••" autocomplete="current-password" required minlength="6">
+                                    <button type="button" class="btn btn-outline-secondary rounded-end-3" id="togglePwdBtn" aria-label="Toggle password visibility">
+                                        <i class="fa-regular fa-eye" id="togglePwdIcon"></i>
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback">Password is required.</div>
+                            </div>
+
+                            <div class="mb-4 d-flex align-items-center gap-2">
+                                <input type="checkbox" class="form-check-input" id="rememberMe" checked>
+                                <label class="form-check-label small text-muted" for="rememberMe">Remember me on this browser</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary-gradient w-100 py-2 rounded-pill fw-bold" id="loginSubmitBtn">
+                                <span class="btn-text"><i class="fa-solid fa-right-to-bracket me-2"></i> Sign In to Account</span>
+                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            </button>
+                        </form>
+
+                        <div class="text-center mt-4 pt-3 border-top">
+                            <p class="text-muted small mb-0">
+                                Don't have an account yet? <a href="register.html" class="text-primary fw-bold text-decoration-none">Register for Free 🇵🇰</a>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Standard 4-Column Footer -->
+    <footer class="bg-dark text-light pt-5 pb-4 mt-auto border-top border-dark-subtle">
+        <div class="container">
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center gap-2 fw-bold fs-5 mb-3">
+                        <div class="brand-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+                        <span>Event<span class="text-primary-gradient">Discovery</span> <span class="badge bg-success-subtle text-success small">PK 🇵🇰</span></span>
+                    </div>
+                    <p class="text-muted small pe-lg-3">
+                        Pakistan's premier event discovery and community engagement network connecting attendees with live Sufi concerts, AI hackathons, food fests, and cultural expos.
+                    </p>
+                    <div class="d-flex gap-3 mt-3">
+                        <a href="#" class="social-link" title="Twitter/X"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#" class="social-link" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-link" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#" class="social-link" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="text-uppercase fw-bold text-light mb-3 letter-spacing-1">Top Cities</h6>
+                    <ul class="list-unstyled text-muted small mb-0 d-flex flex-column gap-2">
+                        <li><a href="../events/index.html?city=lahore" class="footer-link">Lahore Events</a></li>
+                        <li><a href="../events/index.html?city=karachi" class="footer-link">Karachi Events</a></li>
+                        <li><a href="../events/index.html?city=islamabad" class="footer-link">Islamabad Events</a></li>
+                        <li><a href="../events/index.html?city=peshawar" class="footer-link">Peshawar Events</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="text-uppercase fw-bold text-light mb-3 letter-spacing-1">Quick Links</h6>
+                    <ul class="list-unstyled text-muted small mb-0 d-flex flex-column gap-2">
+                        <li><a href="../index.html" class="footer-link">Home</a></li>
+                        <li><a href="../events/index.html" class="footer-link">Explore Events</a></li>
+                        <li><a href="../categories/index.html" class="footer-link">Categories</a></li>
+                        <li><a href="register.html" class="footer-link">Create Account</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="text-uppercase fw-bold text-light mb-3 letter-spacing-1">Stay Updated</h6>
+                    <p class="text-muted small">
+                        Get weekly digests of top upcoming concerts, tech conferences, community meetups, and festivals across Pakistan.
+                    </p>
+                </div>
+            </div>
+            <hr class="border-dark my-4">
+            <div class="row align-items-center small text-muted">
+                <div class="col-md-6 text-center text-md-start">&copy; 2026 <strong>EventDiscovery Pakistan</strong>. All rights reserved.</div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="../events/index.html" class="text-muted text-decoration-none me-3 hover-white">Explore Events</a>
+                    <a href="../categories/index.html" class="text-muted text-decoration-none me-3 hover-white">Categories</a>
+                    <a href="../events/index.html?view=split" class="text-muted text-decoration-none hover-white">Live Geo-Map</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Prototype JS Modules -->
+    <script src="../js/prototype-data.js"></script>
+    <script src="../js/prototype-auth.js"></script>
+    <script src="../js/prototype-app.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            PrototypeApp.init('../');
+
+            // Redirect if already logged in
+            if (PrototypeAuth.isLoggedIn()) {
+                window.location.href = '../user/dashboard.html';
+                return;
+            }
+
+            const loginForm = document.getElementById('loginForm');
+            const loginPassword = document.getElementById('loginPassword');
+            const togglePwdBtn = document.getElementById('togglePwdBtn');
+            const togglePwdIcon = document.getElementById('togglePwdIcon');
+
+            // Toggle password visibility
+            togglePwdBtn.addEventListener('click', function() {
+                const isPwd = loginPassword.type === 'password';
+                loginPassword.type = isPwd ? 'text' : 'password';
+                togglePwdIcon.classList.toggle('fa-eye', !isPwd);
+                togglePwdIcon.classList.toggle('fa-eye-slash', isPwd);
+            });
+
+            // Demo account quick-fill
+            document.getElementById('demoUserBtn').addEventListener('click', function() {
+                document.getElementById('loginEmail').value = 'ahmed.khan@eventdiscovery.pk';
+                document.getElementById('loginPassword').value = 'Demo@1234';
+            });
+            document.getElementById('demoAdminBtn').addEventListener('click', function() {
+                document.getElementById('loginEmail').value = 'admin@eventdiscovery.pk';
+                document.getElementById('loginPassword').value = 'Demo@1234';
+            });
+
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value.trim();
+                const password = document.getElementById('loginPassword').value;
+
+                if (!email || !password) {
+                    showToast('Please enter both email and password.', 'warning');
+                    return;
+                }
+
+                const result = PrototypeAuth.login(email, password);
+                if (result.success) {
+                    showToast(`Signed in as <strong>${result.user.name}</strong>! Redirecting…`, 'success');
+                    setTimeout(function() {
+                        const redirect = new URLSearchParams(window.location.search).get('redirect');
+                        if (result.user.role === 'admin' && !redirect) {
+                            window.location.href = '../admin/dashboard.html';
+                        } else {
+                            window.location.href = redirect || '../user/dashboard.html';
+                        }
+                    }, 800);
+                } else {
+                    showToast(result.message || 'Invalid email or password combination.', 'danger');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

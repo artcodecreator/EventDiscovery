@@ -1,0 +1,786 @@
+
+
+
+Event Discovery & Community Engagement Platform
+Design Document
+
+Version 1.0
+
+  
+
+
+
+
+
+
+ 
+
+Group Id: S26PROJECT69E8B
+Supervisor Name: Amjad Iqbal Khan
+
+
+
+
+
+
+
+
+
+
+Revision History
+Date (dd/mm/yyyy)
+Version
+Description
+Author
+24/07/2026
+1.0
+This document contains
+bc210403836
+
+
+Introduction of Design Document      
+
+
+
+Entity Relationship Diagram (ERD)
+
+
+
+Sequence Diagrams
+
+
+
+Architecture Design Diagram
+
+
+
+Class Diagram
+
+
+
+Database Design
+
+
+
+Interface Design
+
+
+
+Test Cases
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Table of Contents
+Contents
+ TOC \o "1-3" \h \z \u Introduction of Design Document PAGEREF _Toc235749778 \h 4
+Objectives: PAGEREF _Toc235749779 \h 4
+Tools & Technology Stack PAGEREF _Toc235749780 \h 4
+Frontend Technology Stack PAGEREF _Toc235749781 \h 4
+Backend Technology Stack PAGEREF _Toc235749782 \h 5
+Primary Users PAGEREF _Toc235749783 \h 5
+Key Features PAGEREF _Toc235749784 \h 5
+Entity Relationship Diagram (ERD) PAGEREF _Toc235749785 \h 6
+Entities & Attributes PAGEREF _Toc235749786 \h 6
+1. Users PAGEREF _Toc235749787 \h 6
+2. Events PAGEREF _Toc235749788 \h 6
+3. Venues PAGEREF _Toc235749789 \h 6
+4. Categories PAGEREF _Toc235749790 \h 7
+5. Registrations PAGEREF _Toc235749791 \h 7
+6. Attendance PAGEREF _Toc235749792 \h 7
+7. Notifications PAGEREF _Toc235749793 \h 7
+8. Tags PAGEREF _Toc235749794 \h 7
+9. Event_Tags (Junction Table) PAGEREF _Toc235749795 \h 7
+10. Event_Categories (Junction Table) PAGEREF _Toc235749796 \h 7
+11. Resources PAGEREF _Toc235749797 \h 8
+12. Event_Resources PAGEREF _Toc235749798 \h 8
+13. Approvals PAGEREF _Toc235749799 \h 8
+Relationships PAGEREF _Toc235749800 \h 8
+Core Relationships PAGEREF _Toc235749801 \h 8
+Participation & Tracking PAGEREF _Toc235749802 \h 8
+Resources & Management PAGEREF _Toc235749803 \h 8
+Approval Workflow PAGEREF _Toc235749804 \h 9
+Sequence Diagrams PAGEREF _Toc235749805 \h 10
+Event Filtering & Search PAGEREF _Toc235749806 \h 15
+Architecture Design Diagram PAGEREF _Toc235749807 \h 16
+Tiers PAGEREF _Toc235749808 \h 16
+1. Presentation Layer (Frontend) PAGEREF _Toc235749809 \h 16
+2. Application Layer (Business Logic Layer) PAGEREF _Toc235749810 \h 16
+3. Data Layer (Backend / Data Access Layer) PAGEREF _Toc235749811 \h 17
+Key Notes PAGEREF _Toc235749812 \h 17
+Class Diagram PAGEREF _Toc235749813 \h 19
+Database Design PAGEREF _Toc235749814 \h 19
+Interface Design PAGEREF _Toc235749815 \h 20
+Test Cases PAGEREF _Toc235749816 \h 22
+1. Users Entity – Test Cases PAGEREF _Toc235749817 \h 22
+2. Events Entity – Test Cases PAGEREF _Toc235749818 \h 22
+3. Venues Entity – Test Cases PAGEREF _Toc235749819 \h 22
+4. Resources Entity – Test Cases PAGEREF _Toc235749820 \h 22
+5. Categories Entity – Test Cases PAGEREF _Toc235749821 \h 22
+6. Registrations Entity – Test Cases PAGEREF _Toc235749822 \h 23
+7. Approvals Entity – Test Cases PAGEREF _Toc235749823 \h 23
+8. Attendance Entity – Test Cases PAGEREF _Toc235749824 \h 23
+9. Notifications Entity – Test Cases PAGEREF _Toc235749825 \h 23
+10. Tags Entity – Test Cases PAGEREF _Toc235749826 \h 23
+11. Junction Tables (Event_Tags, Event_Categories, Event_Resources) PAGEREF _Toc235749827 \h 23
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Introduction of Design Document
+This Design Document specifies the architecture, components, interfaces, and data design for the Event Management System web platform. It is intended to guide developers in implementing a secure, user-friendly, and robust event management solution that also supports venue booking and attendance tracking features. The document defines the system’s structure through diagrams and specifications to ensure clarity and alignment with the requirements described in the SRS.
+Objectives:
+Define architecture and components.
+Provide visual diagrams (ERD, Class, Architecture).
+Ensure alignment with VU Process Model.
+Serve as a reference during coding, testing, and deployment.
+Tools & Technology Stack
+Frontend Technology Stack
+
+
+
+Component
+
+
+Technology / Tool
+
+
+Framework
+
+
+Next.js 16+ (React-based)
+
+
+Styling
+
+
+Tailwind CSS / Styled Components
+
+
+State Management
+
+
+Context API / Redux
+
+
+UI Components
+
+
+Shadcn/ui / Material-UI
+
+
+Authentication
+
+
+NextAuth.js
+
+
+Map Library
+
+
+Leaflet.js
+
+
+Deployment
+
+
+Vercel / Netlify
+
+Backend Technology Stack
+
+
+
+Component
+
+
+Technology / Tool
+
+
+CMS
+
+
+Strapi v5 (Headless CMS)
+
+
+Database
+
+
+PostgreSQL / MySQL
+
+
+Authentication
+
+
+Strapi built-in auth + JWT
+
+
+File Storage
+
+
+Cloudinary / AWS S3
+
+
+API
+
+
+RESTful API / GraphQL
+
+
+Deployment
+
+
+Railway / DigitalOcean / AWS
+
+
+The Event Discovery & Community Engagement Platform is a web-based system that allows:
+Guest Users and Registered Users to browse, search, and explore events, view event details, and RSVP or register for events. 
+Registered Users to save favorite events, submit reviews and ratings, and manage their profiles and event participation. 
+Event Organizers (Registered Users) to submit and manage event listings for approval by the system. 
+Administrators to manage events, approve or reject submitted events, manage users and categories, and monitor overall platform activities. 
+Integration of interactive maps, event filtering, and automated notifications to enhance event discovery and user engagement.
+Primary Users
+Guest User 
+Registered User 
+Event Organizer 
+Administrator (Admin / Super Admin) 
+Key Features
+Event browsing with interactive map and list view 
+Event search and category-based filtering 
+Event detail pages with images, location, and full description 
+RSVP and event registration system 
+Favorite/bookmark events for registered users 
+User reviews and ratings for events 
+Event submission and approval workflow 
+Featured events section on homepage 
+Real-time synchronization between map and list views 
+Role-based access control (Guest, User, Admin) 
+Admin dashboard for event, user, and category management 
+Seeded/demo event data for testing and demonstration
+
+
+
+
+
+
+
+
+
+
+Entity Relationship Diagram (ERD) 
+Entities & Attributes
+1. Users
+user_id (PK) 
+name 
+email 
+password_hash 
+role 
+is_active 
+created_at 
+2. Events
+event_id (PK) 
+title 
+description 
+venue_id (FK) 
+category_id (FK) 
+start_time 
+end_time 
+capacity 
+status 
+organizer_id (FK → Users) 
+created_at 
+3. Venues
+venue_id (PK) 
+name 
+location 
+capacity 
+4. Categories
+category_id (PK) 
+name 
+5. Registrations
+registration_id (PK) 
+user_id (FK) 
+event_id (FK) 
+status 
+registered_at 
+6. Attendance
+attendance_id (PK) 
+registration_id (FK) 
+check_in_at 
+7. Notifications
+notification_id (PK) 
+user_id (FK) 
+event_id (FK) 
+message 
+type 
+status 
+8. Tags
+tag_id (PK) 
+name 
+9. Event_Tags (Junction Table)
+id (PK) 
+event_id (FK) 
+tag_id (FK) 
+10. Event_Categories (Junction Table)
+(if multiple categories allowed)
+id (PK) 
+event_id (FK) 
+category_id (FK) 
+11. Resources
+resource_id (PK) 
+name 
+type 
+quantity_available 
+12. Event_Resources
+id (PK) 
+event_id (FK) 
+resource_id (FK) 
+quantity_reserved 
+13. Approvals
+approval_id (PK) 
+event_id (FK) 
+admin_id (FK → Users) 
+decision 
+reason 
+decided_at 
+Relationships
+Core Relationships
+A User organizes → many Events (1:N) 
+A User registers for → many Events via Registrations (M:N) 
+An Event belongs to → one Venue (N:1) 
+An Event belongs to → one or many Categories 
+An Event has → many Tags (M:N via Event_Tags) 
+Participation & Tracking
+A Registration leads to → one Attendance 
+A User receives → many Notifications 
+An Event generates → many Notifications 
+Resources & Management
+An Event uses → many Resources (M:N via Event_Resources) 
+Approval Workflow
+An Event has → approval records in Approvals 
+An Admin (User) approves/rejects → events
+
+
+
+
+
+Sequence Diagrams 
+
+User Registration
+
+Event Browsing
+
+
+Event Registration (RSVP)
+
+
+Event Creation (Submission)
+
+
+Event Approval (Admin)
+
+
+
+Resource Allocation
+
+
+
+Tag & Category Assignment
+
+
+
+Attendance Tracking
+
+
+
+Notifications Flow\
+
+
+
+Admin Analytics Dashboard
+
+
+Event Filtering & Search
+
+
+
+Favorites / Bookmarking
+
+
+
+Architecture Design Diagram
+3-Tier Architecture (Modern Web Stack)
+Tiers
+1. Presentation Layer (Frontend)
+Purpose:Handles user interface, user interactions, and client-side rendering. Provides responsive event browsing, map visualization, and user engagement features. 
+Technologies: 
+Next.js (React-based framework) 
+Tailwind CSS / Styled Components 
+Shadcn UI / Material-UI 
+Leaflet.js (for maps) 
+NextAuth.js (authentication handling) 
+2. Application Layer (Business Logic Layer)
+Purpose:Manages core application logic, workflows, authentication, authorization, and API handling. Processes event submissions, approvals, RSVPs, and user-specific operations. 
+Technologies: 
+Strapi v5 (Headless CMS) 
+Custom Controllers & Services (Strapi APIs) 
+JWT-based Authentication 
+RESTful API / GraphQL API 
+3. Data Layer (Backend / Data Access Layer)
+Purpose:Handles data storage, retrieval, and persistence. Ensures efficient querying and management of events, users, registrations, and related entities. 
+Technologies: 
+PostgreSQL / MySQL (Database) 
+Strapi ORM / Query Engine 
+Cloud Storage (AWS S3 / Cloudinary for media files) 
+Key Notes
+Clear separation of concerns between UI, logic, and data 
+Scalable headless architecture using Next.js + Strapi 
+Secure authentication and role-based access control 
+API-driven communication between frontend and backend 
+Optimized for performance, SEO, and responsiveness
+
+
+
+Class Diagram
+
+
+
+Database Design
+The Database Design defines how data will be structured, stored, and accessed in your system. Based on the ERD and Class Diagram, we’ll now define the:
+Tables
+Fields (with data types)
+Primary & Foreign Keys
+Relationships
+
+
+
+
+
+Interface Design
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Test Cases
+1. Users Entity – Test Cases
+Test Case ID
+Test Scenario
+Input
+Expected Output
+Status
+TC_USER_01
+Register new user
+Valid name, email, password
+User account created successfully
+Pass
+TC_USER_02
+Register with existing email
+Duplicate email
+Error: Email already exists
+Pass
+TC_USER_03
+Login with valid credentials
+Correct email & password
+User logged in
+Pass
+TC_USER_04
+Login with invalid password
+Wrong password
+Error message displayed
+Pass
+TC_USER_05
+Update profile
+New name/email
+Profile updated
+Pass
+2. Events Entity – Test Cases
+Test Case ID
+Test Scenario
+Input
+Expected Output
+Status
+TC_EVENT_01
+Create event
+Valid event details
+Event created successfully
+Pass
+TC_EVENT_02
+Create event with missing fields
+Missing title/date
+Validation error
+Pass
+TC_EVENT_03
+Update event
+Modified details
+Event updated
+Pass
+TC_EVENT_04
+Delete event
+Valid event ID
+Event removed
+Pass
+TC_EVENT_05
+View event details
+Event ID
+Event info displayed
+Pass
+3. Venues Entity – Test Cases
+Test Case ID
+Test Scenario
+Input
+Expected Output
+Status
+TC_VENUE_01
+Add venue
+Valid venue data
+Venue added
+Pass
+TC_VENUE_02
+Assign venue to event
+Venue ID + Event ID
+Venue linked to event
+Pass
+TC_VENUE_03
+Check capacity limit
+Over-capacity booking
+Error: Capacity exceeded
+Pass
+4. Resources Entity – Test Cases
+Test Case ID
+Test Scenario
+Input
+Expected Output
+Status
+TC_RES_01
+Add resource
+Resource name/type
+Resource added
+Pass
+TC_RES_02
+Allocate resource to event
+Resource ID + Event ID
+Resource assigned
+Pass
+TC_RES_03
+Allocate unavailable resource
+Already allocated
+Error: Not available
+Pass
+5. Categories Entity – Test Cases
+Test Case ID
+Test Scenario
+Input
+Expected Output
+Status
+TC_CAT_01
+Add category
+Category name
+Category created
+Pass
+TC_CAT_02
+Assign category to event
+Category ID + Event ID
+Category linked
+Pass
+TC_CAT_03
+Duplicate category
+Same name
+Error message
+Pass
+
+6. Registrations Entity – Test Cases
+Test Case ID
+Test Scenario
+Input
+Expected Output
+Status
+TC_REG_01
+Register for event
+User ID + Event ID
+Registration successful
+Pass
+TC_REG_02
+Duplicate registration
+Same user/event
+Error: Already registered
+Pass
+TC_REG_03
+Cancel registration
+Registration ID
+Registration removed
+Pass
+7. Approvals Entity – Test Cases
+Test Case ID
+Test Scenario
+Input
+Expected Output
+Status
+TC_APP_01
+Approve event
+Admin decision = Approve
+Event approved
+Pass
+TC_APP_02
+Reject event
+Admin decision = Reject
+Event rejected
+Pass
+TC_APP_03
+Invalid approval action
+Missing decision
+Error message
+Pass
+8. Attendance Entity – Test Cases
+Test Case ID
+Test Scenario
+Input
+Expected Output
+Status
+TC_ATT_01
+Mark attendance
+Valid check-in token
+Attendance recorded
+Pass
+TC_ATT_02
+Invalid token
+Wrong token
+Error message
+Pass
+TC_ATT_03
+Duplicate check-in
+Same token reused
+Error: Already checked-in
+Pass
+9. Notifications Entity – Test Cases
+Test Case ID
+Test Scenario
+Input
+Expected Output
+Status
+TC_NOTIF_01
+Send notification
+Event update
+Notification sent to users
+Pass
+TC_NOTIF_02
+Notify registration success
+User registers
+Confirmation notification
+Pass
+TC_NOTIF_03
+Invalid user ID
+Wrong user
+Notification fails
+Pass
+10. Tags Entity – Test Cases
+Test Case ID
+Test Scenario
+Input
+Expected Output
+Status
+TC_TAG_01
+Create tag
+Tag name
+Tag added
+Pass
+TC_TAG_02
+Assign tag to event
+Tag ID + Event ID
+Tag linked
+Pass
+TC_TAG_03
+Duplicate tag
+Same name
+Error message
+Pass
+11. Junction Tables (Event_Tags, Event_Categories, Event_Resources)
+Test Case ID
+Test Scenario
+Input
+Expected Output
+Status
+TC_JUNC_01
+Link event & tag
+Event ID + Tag ID
+Relation created
+Pass
+TC_JUNC_02
+Link event & category
+Event ID + Category ID
+Relation created
+Pass
+TC_JUNC_03
+Remove relation
+IDs
+Relation deleted
+Pass
+

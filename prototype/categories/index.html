@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Browse all event categories across Pakistan — Technology, Music, Sports, Art, Food, Community, and Health & Wellness.">
+    <meta name="author" content="EventDiscovery Pakistan Team">
+    <title>Event Categories in Pakistan 🇵🇰 | EventDiscovery</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom Prototype Styling -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+    <!-- Navigation Bar -->
+    <header class="sticky-top modern-header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark-glass py-3">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="../index.html">
+                    <div class="brand-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+                    <span>Event<span class="text-primary-gradient">Discovery</span> <span class="badge bg-success-subtle text-success border border-success-subtle py-1 px-2" style="font-size: 0.65rem;">PAKISTAN 🇵🇰</span></span>
+                </a>
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link" href="../events/index.html"><i class="fa-regular fa-compass me-1"></i> Explore Events</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="index.html"><i class="fa-solid fa-layer-group me-1"></i> Categories</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../events/index.html?view=split"><i class="fa-solid fa-map-location-dot me-1"></i> Live Geo-Map</a></li>
+                    </ul>
+                    <form class="d-flex me-lg-3 my-2 my-lg-0" action="../events/index.html" method="GET">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-dark-card border-dark text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                            <input class="form-control bg-dark-card border-dark text-light nav-search-input" type="search" name="search" placeholder="Search events..." aria-label="Search">
+                        </div>
+                    </form>
+                    <div id="navbarAuthArea" class="d-flex align-items-center gap-2 mt-2 mt-lg-0"></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+        <!-- Page Header -->
+        <div class="bg-dark text-white py-5 border-bottom border-dark text-center">
+            <div class="container">
+                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-semibold mb-3">
+                    <i class="fa-solid fa-layer-group me-1"></i> Pakistan Community Hub
+                </span>
+                <h1 class="display-5 fw-bold mb-2">Explore Event Categories in Pakistan</h1>
+                <p class="lead text-muted mx-auto" style="max-width: 600px;">
+                    Find vibrant Pakistani communities and gatherings tailored to your passions. Choose a category below to discover upcoming events.
+                </p>
+            </div>
+        </div>
+
+        <!-- Categories Grid -->
+        <div class="py-5 bg-light">
+            <div class="container">
+                <div class="row g-4" id="categoriesGridContainer">
+                    <!-- Populated dynamically by PrototypeApp.initCategories() -->
+                    <div class="col-12 text-center py-5">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x text-muted"></i>
+                        <p class="text-muted mt-3">Loading categories...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Banner -->
+        <section class="py-5 position-relative text-white" style="background: var(--primary-gradient);">
+            <div class="container text-center py-3">
+                <h2 class="display-6 fw-bold mb-3">Ready to Discover Your Next Event?</h2>
+                <p class="lead mb-4 opacity-90 mx-auto" style="max-width: 600px;">
+                    Browse all 8+ curated Pakistani events or explore the interactive Geo-Map to find what's happening near you.
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="../events/index.html" class="btn btn-light text-primary btn-lg rounded-pill px-4 fw-bold shadow">
+                        <i class="fa-solid fa-compass me-1"></i> Browse All Events
+                    </a>
+                    <a href="../events/index.html?view=split" class="btn btn-outline-light btn-lg rounded-pill px-4 fw-bold">
+                        <i class="fa-solid fa-map-location-dot me-1"></i> Open Geo-Map
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light pt-5 pb-4 mt-auto border-top border-dark-subtle">
+        <div class="container">
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center gap-2 fw-bold fs-5 mb-3">
+                        <div class="brand-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+                        <span>Event<span class="text-primary-gradient">Discovery</span> <span class="badge bg-success-subtle text-success small">PK 🇵🇰</span></span>
+                    </div>
+                    <p class="text-muted small">Pakistan's premier event discovery and community engagement network.</p>
+                    <div class="d-flex gap-3 mt-3">
+                        <a href="#" class="social-link" title="Twitter/X"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#" class="social-link" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-link" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#" class="social-link" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="text-uppercase fw-bold text-light mb-3 letter-spacing-1">Categories</h6>
+                    <ul class="list-unstyled text-muted small mb-0 d-flex flex-column gap-2">
+                        <li><a href="../events/index.html?category=technology" class="footer-link">Tech & Hackathons</a></li>
+                        <li><a href="../events/index.html?category=music" class="footer-link">Music & Qawwali</a></li>
+                        <li><a href="../events/index.html?category=sports" class="footer-link">Sports & Marathons</a></li>
+                        <li><a href="../events/index.html?category=food-drink" class="footer-link">Food Street & Chai</a></li>
+                        <li><a href="../events/index.html?category=art-culture" class="footer-link">Art & Heritage</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="text-uppercase fw-bold text-light mb-3 letter-spacing-1">Navigate</h6>
+                    <ul class="list-unstyled text-muted small mb-0 d-flex flex-column gap-2">
+                        <li><a href="../index.html" class="footer-link">Home</a></li>
+                        <li><a href="../events/index.html" class="footer-link">All Events</a></li>
+                        <li><a href="index.html" class="footer-link">Categories</a></li>
+                        <li><a href="../auth/login.html" class="footer-link">Sign In</a></li>
+                        <li><a href="../auth/register.html" class="footer-link">Register</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="border-dark my-4">
+            <div class="row align-items-center small text-muted">
+                <div class="col-md-6 text-center text-md-start">&copy; 2026 <strong>EventDiscovery Pakistan</strong>. All rights reserved.</div>
+                <div class="col-md-6 text-center text-md-end">
+                    <span class="badge bg-dark-card border border-dark text-muted me-2">7 Categories</span>
+                    <span class="badge bg-dark-card border border-dark text-success">PKR (Rs.)</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Prototype JS Modules -->
+    <script src="../js/prototype-data.js"></script>
+    <script src="../js/prototype-auth.js"></script>
+    <script src="../js/prototype-app.js"></script>
+
+    <!-- Page Initialization -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            PrototypeApp.initCategories('../');
+        });
+    </script>
+</body>
+</html>

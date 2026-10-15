@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Full event details including venue map, gallery, RSVP pass, organizer info, and community reviews.">
+    <meta name="author" content="EventDiscovery Pakistan Team">
+    <title>Event Details | EventDiscovery Pakistan 🇵🇰</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Leaflet.js 1.9 CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <!-- Custom Prototype Styling -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+    <!-- Navigation Bar -->
+    <header class="sticky-top modern-header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark-glass py-3">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="../index.html">
+                    <div class="brand-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+                    <span>Event<span class="text-primary-gradient">Discovery</span> <span class="badge bg-success-subtle text-success border border-success-subtle py-1 px-2" style="font-size: 0.65rem;">PAKISTAN 🇵🇰</span></span>
+                </a>
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link active" href="index.html"><i class="fa-regular fa-compass me-1"></i> Explore Events</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../categories/index.html"><i class="fa-solid fa-layer-group me-1"></i> Categories</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html?view=split"><i class="fa-solid fa-map-location-dot me-1"></i> Live Geo-Map</a></li>
+                    </ul>
+                    <form class="d-flex me-lg-3 my-2 my-lg-0" action="index.html" method="GET">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-dark-card border-dark text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                            <input class="form-control bg-dark-card border-dark text-light nav-search-input" type="search" name="search" placeholder="Search events..." aria-label="Search">
+                        </div>
+                    </form>
+                    <div id="navbarAuthArea" class="d-flex align-items-center gap-2 mt-2 mt-lg-0"></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+        <!-- Breadcrumbs & Title Bar -->
+        <div class="bg-dark text-white py-4 border-bottom border-dark">
+            <div class="container">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-2 small text-muted">
+                        <li class="breadcrumb-item"><a href="../index.html" class="text-muted text-decoration-none">Home</a></li>
+                        <li class="breadcrumb-item"><a href="index.html" class="text-muted text-decoration-none">Events</a></li>
+                        <li class="breadcrumb-item"><a id="detailBreadcrumbCat" href="index.html" class="text-muted text-decoration-none">Category</a></li>
+                        <li class="breadcrumb-item active text-light" aria-current="page" id="detailBreadcrumbTitle">Event Title</li>
+                    </ol>
+                </nav>
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                    <span id="detailCategoryBadge" class="badge" style="font-size: 0.8rem; background-color: #6366f1; color: #fff;"></span>
+                    <span id="detailCityBadge" class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1"></span>
+                    <span id="detailAttendeeBadge" class="badge bg-light text-dark fw-bold"></span>
+                </div>
+                <h1 class="display-6 fw-bold mb-0 text-white" id="detailTitle">Loading Event...</h1>
+            </div>
+        </div>
+
+        <!-- Main Event Body -->
+        <div class="py-5 bg-light">
+            <div class="container">
+                <div class="row g-4">
+                    <!-- Left Column: Media, Details, Map, Reviews -->
+                    <div class="col-lg-8">
+
+                        <!-- Gallery Carousel -->
+                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+                            <div id="detailGalleryContainer">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Event Description Card -->
+                        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                            <h3 class="fw-bold mb-3">About This Event</h3>
+                            <div id="detailFullDescription" class="text-secondary mb-4" style="white-space: pre-line; font-size: 1.05rem; line-height: 1.8;"></div>
+
+                            <!-- Highlight Badges -->
+                            <div class="row g-3 py-3 border-top border-bottom my-3">
+                                <div class="col-sm-4 text-center">
+                                    <div class="text-muted small">Event Date</div>
+                                    <div class="fw-bold text-dark" id="detailDateText"></div>
+                                </div>
+                                <div class="col-sm-4 text-center border-start border-end">
+                                    <div class="text-muted small">Timing (PKT)</div>
+                                    <div class="fw-bold text-dark" id="detailTimeText"></div>
+                                </div>
+                                <div class="col-sm-4 text-center">
+                                    <div class="text-muted small">Pass / Ticket</div>
+                                    <div class="fw-bold text-success" id="detailPriceText"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Leaflet Location Map Card -->
+                        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h4 class="fw-bold mb-1"><i class="fa-solid fa-map-location-dot text-primary me-2"></i> Pakistani Venue Location</h4>
+                                    <div class="text-muted small" id="detailVenueInfo">Loading venue...</div>
+                                </div>
+                                <a id="detailDirectionsBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm rounded-pill">
+                                    <i class="fa-solid fa-diamond-turn-right me-1"></i> Directions
+                                </a>
+                            </div>
+                            <div id="detailVenueMap" style="height: 340px; width: 100%;"></div>
+                        </div>
+
+                        <!-- Reviews and Ratings -->
+                        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="fw-bold mb-0">Community Reviews & Feedback</h4>
+                                <span class="badge bg-warning-subtle text-dark border border-warning-subtle px-3 py-2 rounded-pill">
+                                    <i class="fa-solid fa-star text-warning me-1"></i> Community Rated
+                                </span>
+                            </div>
+                            <div class="d-flex flex-column gap-3" id="detailReviewsContainer">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: RSVP Box, Organizer, Related -->
+                    <div class="col-lg-4">
+
+                        <!-- RSVP Sidebar Card -->
+                        <div class="detail-sidebar-card mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-muted small text-uppercase fw-semibold">Pass Status</span>
+                                <div id="detailPassStatusBadge"></div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="display-6 fw-bold text-dark mb-1" id="detailSidebarPrice"></div>
+                                <div class="small text-muted" id="detailSidebarAttendees"></div>
+                            </div>
+
+                            <!-- RSVP Action Button -->
+                            <div id="detailRsvpContainer" class="mb-3">
+                                <!-- Populated dynamically -->
+                            </div>
+
+                            <!-- Save Favorite Button -->
+                            <button type="button" id="detailFavBtn" class="btn btn-outline-secondary w-100 py-2 rounded-pill fw-semibold">
+                                <i class="fa-regular fa-heart me-1"></i>
+                                <span>Save Event to Favorites</span>
+                            </button>
+                        </div>
+
+                        <!-- Organizer Profile Card -->
+                        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                            <h5 class="fw-bold mb-3"><i class="fa-solid fa-building-flag text-primary me-2"></i> Event Host / Organization</h5>
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div class="brand-icon" style="width: 48px; height: 48px; font-size: 1.2rem;">
+                                    <i class="fa-solid fa-landmark"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark" id="detailOrgName"></div>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle">Verified Pakistani Host 🇵🇰</span>
+                                </div>
+                            </div>
+                            <div class="small text-muted d-flex flex-column gap-2">
+                                <div><i class="fa-regular fa-envelope text-primary me-2"></i> <a id="detailOrgEmail" href="mailto:#" class="text-muted text-decoration-none"></a></div>
+                                <div><i class="fa-solid fa-phone text-success me-2"></i> <span id="detailOrgPhone"></span></div>
+                            </div>
+                        </div>
+
+                        <!-- Related Events -->
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white" id="relatedEventsCard">
+                            <h5 class="fw-bold mb-3">More in This Category</h5>
+                            <div class="d-flex flex-column gap-3" id="detailRelatedContainer">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light pt-5 pb-4 mt-auto border-top border-dark-subtle">
+        <div class="container">
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center gap-2 fw-bold fs-5 mb-3">
+                        <div class="brand-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+                        <span>Event<span class="text-primary-gradient">Discovery</span> <span class="badge bg-success-subtle text-success small">PK 🇵🇰</span></span>
+                    </div>
+                    <p class="text-muted small">Pakistan's premier event discovery and community engagement network.</p>
+                    <div class="d-flex gap-3 mt-3">
+                        <a href="#" class="social-link" title="Twitter/X"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#" class="social-link" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-link" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#" class="social-link" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="text-uppercase fw-bold text-light mb-3 letter-spacing-1">Top Cities</h6>
+                    <ul class="list-unstyled text-muted small mb-0 d-flex flex-column gap-2">
+                        <li><a href="index.html?city=lahore" class="footer-link">Lahore Events</a></li>
+                        <li><a href="index.html?city=karachi" class="footer-link">Karachi Events</a></li>
+                        <li><a href="index.html?city=islamabad" class="footer-link">Islamabad Events</a></li>
+                        <li><a href="index.html?city=peshawar" class="footer-link">Peshawar Events</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="text-uppercase fw-bold text-light mb-3 letter-spacing-1">Quick Links</h6>
+                    <ul class="list-unstyled text-muted small mb-0 d-flex flex-column gap-2">
+                        <li><a href="../index.html" class="footer-link">Home</a></li>
+                        <li><a href="index.html" class="footer-link">Explore Events</a></li>
+                        <li><a href="../categories/index.html" class="footer-link">Categories</a></li>
+                        <li><a href="create.html" class="footer-link">Submit Event</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="text-uppercase fw-bold text-light mb-3 letter-spacing-1">Stay Updated</h6>
+                    <p class="text-muted small">
+                        Get weekly digests of top upcoming concerts, tech conferences, community meetups, and festivals across Pakistan.
+                    </p>
+                </div>
+            </div>
+            <hr class="border-dark my-4">
+            <div class="row align-items-center small text-muted">
+                <div class="col-md-6 text-center text-md-start">&copy; 2026 <strong>EventDiscovery Pakistan</strong>. All rights reserved.</div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="index.html" class="text-muted text-decoration-none me-3 hover-white">Explore Events</a>
+                    <a href="../categories/index.html" class="text-muted text-decoration-none me-3 hover-white">Categories</a>
+                    <a href="index.html?view=split" class="text-muted text-decoration-none hover-white">Live Geo-Map</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Leaflet.js 1.9 JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Prototype JS Modules -->
+    <script src="../js/prototype-data.js"></script>
+    <script src="../js/prototype-auth.js"></script>
+    <script src="../js/map.js"></script>
+    <script src="../js/prototype-app.js"></script>
+
+    <!-- Page Initialization -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            PrototypeApp.initEventDetail('../');
+        });
+    </script>
+</body>
+</html>
