@@ -376,3 +376,215 @@ describe("Security headers & information disclosure", () => {
   });
 });
 
+describe("Admin Category Management", () => {
+  test("anonymous / user cannot access admin categories API", async () => {
+    assert.equal((await anon().req("/api/admin/categories")).status, 401);
+    assert.equal((await (await as(USER_EMAIL)).req("/api/admin/categories")).status, 403);
+  });
+
+  test("admin can list, create, update, and delete categories", async () => {
+    const admin = await as(ADMIN_EMAIL);
+
+    // List categories
+    const listRes = await admin.req("/api/admin/categories");
+    assert.equal(listRes.status, 200);
+    const { data: initialCats } = await listRes.json();
+    assert.ok(Array.isArray(initialCats) && initialCats.length > 0);
+
+    // Create category
+    const catName = uniq("QA-Category");
+    const createRes = await admin.req("/api/admin/categories", {
+      method: "POST",
+      json: { name: catName, icon: "fa-star", color: "#6366f1", description: "Created during QA test" }
+    });
+    assert.equal(createRes.status, 201);
+    const { data: createdCat } = await createRes.json();
+    assert.equal(createdCat.name, catName);
+    assert.ok(createdCat.id);
+
+    // Update category
+    const updatedName = catName + "-Renamed";
+    const updateRes = await admin.req("/api/admin/categories", {
+      method: "PATCH",
+      json: { id: createdCat.id, name: updatedName, color: "#10b981" }
+    });
+    assert.equal(updateRes.status, 200);
+    const { data: updatedCat } = await updateRes.json();
+    assert.equal(updatedCat.name, updatedName);
+
+    // Delete category
+    const deleteRes = await admin.req(`/api/admin/categories?id=${createdCat.id}`, { method: "DELETE" });
+    assert.equal(deleteRes.status, 200);
+
+    // Verify deletion of non-associated category
+    const postDeleteList = (await (await admin.req("/api/admin/categories")).json()).data;
+    assert.ok(!postDeleteList.some((c) => String(c.id) === String(createdCat.id)));
+  });
+
+  test("deleting category with assigned events is blocked with 400", async () => {
+    const admin = await as(ADMIN_EMAIL);
+    // Category 1 is "Technology & Hackathons" which has active events
+    const res = await admin.req("/api/admin/categories?id=1", { method: "DELETE" });
+    assert.equal(res.status, 400);
+    const json = await res.json();
+    assert.ok(json.error && /associated/i.test(json.error));
+  });
+});
+
+describe("Admin Event Management (In-Dashboard Edit)", () => {
+  test("anonymous / user cannot PATCH admin events", async () => {
+    assert.equal((await anon().req("/api/admin/events", { method: "PATCH", json: { id: 1, title: "Hacked" } })).status, 401);
+    assert.equal((await (await as(USER_EMAIL)).req("/api/admin/events", { method: "PATCH", json: { id: 1, title: "Hacked" } })).status, 403);
+  });
+
+  test("admin can update event details via PATCH", async () => {
+    const admin = await as(ADMIN_EMAIL);
+    const newTitle = "National Tech Summit 2026 - Updated";
+    const res = await admin.req("/api/admin/events", {
+      method: "PATCH",
+      json: {
+        id: 1,
+        title: newTitle,
+        venueName: "Updated Expo Centre Hall 5",
+        city: "Lahore",
+        capacity: 1200
+      }
+    });
+    assert.equal(res.status, 200);
+    const { data: updated } = await res.json();
+    assert.equal(updated.title, newTitle);
+    assert.equal(updated.venue, "Updated Expo Centre Hall 5");
+  });
+});
+
+describe("Admin User Management & RBAC Protection", () => {
+  test("anonymous / user cannot access admin users endpoint", async () => {
+    assert.equal((await anon().req("/api/admin/users")).status, 401);
+    assert.equal((await (await as(USER_EMAIL)).req("/api/admin/users")).status, 403);
+  });
+
+  test("admin can list users, update status/role, and delete non-protected accounts", async () => {
+    const admin = await as(ADMIN_EMAIL);
+
+    // List users
+    const listRes = await admin.req("/api/admin/users");
+    assert.equal(listRes.status, 200);
+    const { data: users } = await listRes.json();
+    assert.ok(Array.isArray(users) && users.length > 0);
+
+    // Super admin cannot be demoted or deleted
+    const superAdmin = users.find((u) => u.email === ADMIN_EMAIL);
+    assert.ok(superAdmin, "Super admin should exist");
+
+    const demoteRes = await admin.req("/api/admin/users", {
+      method: "PATCH",
+      json: { id: superAdmin.id, role: "user" }
+    });
+    assert.equal(demoteRes.status, 400);
+
+    const deleteSuperAdminRes = await admin.req(`/api/admin/users?id=${superAdmin.id}`, { method: "DELETE" });
+    assert.equal(deleteSuperAdminRes.status, 400);
+
+    // Admin can update a regular user's role and status
+    const target = users.find((u) => u.email === USER_EMAIL);
+    assert.ok(target, "User Ahmed Khan should exist");
+
+    const updateRoleRes = await admin.req("/api/admin/users", {
+      method: "PATCH",
+      json: { id: target.id, role: "organizer", status: "active" }
+    });
+    assert.equal(updateRoleRes.status, 200);
+    const { data: modUser } = await updateRoleRes.json();
+    assert.equal(modUser.role, "organizer");
+
+    // Restore role back to user
+    await admin.req("/api/admin/users", {
+      method: "PATCH",
+      json: { id: target.id, role: "user", status: "active" }
+    });
+  });
+});
+
+describe("Admin Review Moderation", () => {
+  test("anonymous / user cannot access review moderation", async () => {
+    assert.equal((await anon().req("/api/admin/reviews")).status, 401);
+    assert.equal((await (await as(USER_EMAIL)).req("/api/admin/reviews")).status, 403);
+  });
+
+  test("admin can list all reviews and moderate/delete a review", async () => {
+    const admin = await as(ADMIN_EMAIL);
+    const user = await as(USER_EMAIL);
+
+    // Add a test review to event 1 first
+    const addRes = await user.req("/api/reviews", {
+      method: "POST",
+      json: { eventId: 1, rating: 4, comment: "Moderation test review" }
+    });
+    assert.equal(addRes.status, 200);
+
+    // Admin lists reviews
+    const listRes = await admin.req("/api/admin/reviews");
+    assert.equal(listRes.status, 200);
+    const { data: reviews } = await listRes.json();
+    assert.ok(Array.isArray(reviews));
+    const targetRev = reviews.find((r) => r.comment === "Moderation test review");
+    assert.ok(targetRev, "Target review should exist in reviews list");
+
+    // Admin deletes the review
+    const delRes = await admin.req(`/api/admin/reviews?eventId=${targetRev.eventId}&reviewId=${targetRev.id}`, {
+      method: "DELETE"
+    });
+    assert.equal(delRes.status, 200);
+
+    // Verify it is removed
+    const postReviews = (await (await admin.req("/api/admin/reviews")).json()).data;
+    assert.ok(!postReviews.some((r) => r.id === targetRev.id && r.eventId === targetRev.eventId));
+  });
+});
+
+describe("Seating Capacity Overbooking Guard", () => {
+  test("booking over event capacity is rejected with 400", async () => {
+    const admin = await as(ADMIN_EMAIL);
+    const user = await as(USER_EMAIL);
+
+    // Create a boutique event with capacity 1
+    const title = uniq("Intimate Masterclass");
+    const createRes = await user.req("/api/submit-event", {
+      method: "POST",
+      json: {
+        ...validEvent(title),
+        capacity: 1
+      }
+    });
+    assert.equal(createRes.status, 200);
+    const { data: createdEvent } = await createRes.json();
+    const eventId = createdEvent.id;
+
+    // Approve the event
+    await admin.req("/api/admin/approve", {
+      method: "POST",
+      json: { id: eventId }
+    });
+
+    // Book the single available seat
+    const rsvp1 = await user.req("/api/rsvps", {
+      method: "POST",
+      json: { eventId, ticketsCount: 1 }
+    });
+    assert.equal(rsvp1.status, 200);
+
+    // Attempting to book when capacity is 0 remaining should be rejected
+    const rsvp2 = await admin.req("/api/rsvps", {
+      method: "POST",
+      json: { eventId, ticketsCount: 1 }
+    });
+    assert.equal(rsvp2.status, 400);
+    const json = await rsvp2.json();
+    assert.ok(/capacity/i.test(json.error));
+
+    // Release the seat
+    await user.req("/api/rsvps", { method: "DELETE", json: { eventId } });
+  });
+});
+
+

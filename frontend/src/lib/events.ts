@@ -531,8 +531,16 @@ export const initialEvents: EventItem[] = [
 // In-memory global store to guarantee consistent state in runtime & fallback
 declare global {
   var __EVENT_STORE__: EventItem[] | undefined;
+  var __CATEGORIES_STORE__: EventCategory[] | undefined;
   var __USER_RSVPS__: { userId: string; eventId: number | string; ticketsCount: number; createdAt: string }[] | undefined;
   var __USER_FAVORITES__: { userId: string; eventId: number | string; createdAt: string }[] | undefined;
+}
+
+export function getCategoriesStore(): EventCategory[] {
+  if (!globalThis.__CATEGORIES_STORE__) {
+    globalThis.__CATEGORIES_STORE__ = JSON.parse(JSON.stringify(categories));
+  }
+  return globalThis.__CATEGORIES_STORE__!;
 }
 
 function getStore(): EventItem[] {
@@ -701,7 +709,7 @@ export async function getCategories(): Promise<EventCategory[]> {
         if (rows.length) {
           return rows.map((r: any) => {
             const d = r.attributes ?? r;
-            const matched = categories.find(c => c.slug === d.slug);
+            const matched = getCategoriesStore().find(c => c.slug === d.slug);
             return {
               id: r.documentId ?? r.id,
               name: d.name,
@@ -719,13 +727,14 @@ export async function getCategories(): Promise<EventCategory[]> {
       // Fallback
     }
   }
-  return categories;
+  return getCategoriesStore();
 }
 
 // Data manipulation helpers with local state update
 export async function createEventSubmission(payload: any): Promise<EventItem> {
   const store = getStore();
-  const cat = categories.find(c => String(c.id) === String(payload.category_id) || c.slug === payload.categorySlug || c.name === payload.category) || categories[0];
+  const cats = getCategoriesStore();
+  const cat = cats.find(c => String(c.id) === String(payload.category_id) || c.slug === payload.categorySlug || c.name === payload.category) || cats[0];
   const newId = store.length ? Math.max(...store.map(e => Number(e.id) || 0)) + 1 : 1;
   const baseSlug = (String(payload.title).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")) || `event-${newId}`;
   // Slugs must be unique because event detail URLs are resolved by slug.
@@ -862,10 +871,13 @@ export async function toggleRsvp(userId: string, eventId: number | string, ticke
   const event = store.find(e => String(e.id) === String(eventId) || e.documentId === String(eventId));
 
   if (idx !== -1) {
-    rsvps.splice(idx, 1);
-    if (event && (event.rsvpCount || 0) > 0) event.rsvpCount = (event.rsvpCount || 1) - 1;
+    const [removed] = rsvps.splice(idx, 1);
+    if (event && (event.rsvpCount || 0) > 0) event.rsvpCount = Math.max(0, (event.rsvpCount || 0) - (removed.ticketsCount || 1));
     return { active: false };
   } else {
+    if (event && event.capacity && (event.rsvpCount || 0) + ticketsCount > event.capacity) {
+      throw new Error(`Event has reached full capacity (${event.rsvpCount}/${event.capacity} passes reserved).`);
+    }
     rsvps.push({ userId, eventId, ticketsCount, createdAt: new Date().toISOString() });
     if (event) event.rsvpCount = (event.rsvpCount || 0) + ticketsCount;
     return { active: true, ticketsCount };
@@ -925,4 +937,136 @@ export async function addReview(eventId: number | string, review: { rating: numb
     return newRev;
   }
   return null;
+}
+
+export async function createCategory(payload: { name: string; slug?: string; icon?: string; color?: string; description?: string }): Promise<EventCategory> {
+  const store = getCategoriesStore();
+  const slug = payload.slug || payload.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const newId = store.length ? Math.max(...store.map(c => Number(c.id) || 0)) + 1 : 1;
+  const newCat: EventCategory = {
+    id: newId,
+    name: payload.name,
+    slug,
+    icon: payload.icon || "fa-layer-group",
+    color: payload.color || "#6366f1",
+    gradient: `linear-gradient(135deg, ${payload.color || "#6366f1"} 0%, #4338ca 100%)`,
+    description: payload.description || `Events in ${payload.name}`,
+    image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80"
+  };
+  store.push(newCat);
+  return newCat;
+}
+
+export async function updateCategory(idOrSlug: string | number, updates: Partial<EventCategory>): Promise<EventCategory | null> {
+  const store = getCategoriesStore();
+  const cat = store.find(c => String(c.id) === String(idOrSlug) || c.slug === String(idOrSlug));
+  if (!cat) return null;
+  if (updates.name) cat.name = updates.name;
+  if (updates.icon) cat.icon = updates.icon;
+  if (updates.color) {
+    cat.color = updates.color;
+    cat.gradient = `linear-gradient(135deg, ${updates.color} 0%, #4338ca 100%)`;
+  }
+  if (updates.description) cat.description = updates.description;
+  return cat;
+}
+
+export async function deleteCategory(idOrSlug: string | number): Promise<{ success: boolean; error?: string }> {
+  const store = getCategoriesStore();
+  const idx = store.findIndex(c => String(c.id) === String(idOrSlug) || c.slug === String(idOrSlug));
+  if (idx === -1) return { success: false, error: "Category not found." };
+  const target = store[idx];
+  // Safety check: ensure no active events use this category
+  const events = getStore().filter(e => e.status !== "deleted");
+  const count = events.filter(e => e.categorySlug === target.slug || String(e.categoryId) === String(target.id)).length;
+  if (count > 0) {
+    return { success: false, error: `Cannot delete '${target.name}'. There are ${count} active event(s) associated with this category.` };
+  }
+  store.splice(idx, 1);
+  return { success: true };
+}
+
+export async function updateEvent(id: number | string, updates: Partial<EventItem>): Promise<EventItem | null> {
+  const store = getStore();
+  const event = store.find(e => String(e.id) === String(id) || e.documentId === String(id));
+  if (!event) return null;
+
+  if (updates.title) event.title = updates.title;
+  if (updates.venue || updates.venueName) {
+    event.venue = updates.venue || updates.venueName || event.venue;
+    event.venueName = event.venue;
+  }
+  if (updates.address) event.address = updates.address;
+  if (updates.city) event.city = updates.city;
+  if (updates.province) event.province = updates.province;
+  if (updates.date || updates.eventDate) {
+    event.date = updates.date || updates.eventDate || event.date;
+    event.eventDate = event.date;
+  }
+  if (updates.startTime) event.startTime = updates.startTime;
+  if (updates.endTime) event.endTime = updates.endTime;
+  if (updates.time) event.time = updates.time;
+  if (updates.price !== undefined) event.price = updates.price;
+  if (updates.priceValue !== undefined) event.priceValue = updates.priceValue;
+  if (updates.isFree !== undefined) event.isFree = updates.isFree;
+  if (updates.capacity !== undefined) event.capacity = Number(updates.capacity);
+  if (updates.shortDescription) event.shortDescription = updates.shortDescription;
+  if (updates.fullDescription || updates.description) {
+    event.fullDescription = updates.fullDescription || updates.description;
+    event.description = event.fullDescription || event.description;
+  }
+  if (updates.category) {
+    const cats = getCategoriesStore();
+    const matched = cats.find(c => c.name === updates.category || c.slug === updates.categorySlug || String(c.id) === String(updates.categoryId));
+    if (matched) {
+      event.category = matched.name;
+      event.categorySlug = matched.slug;
+      event.categoryColor = matched.color;
+      event.categoryIcon = matched.icon;
+      event.categoryId = matched.id as number;
+    }
+  }
+  return event;
+}
+
+export async function getAllReviews() {
+  const store = getStore().filter(e => e.status !== "deleted");
+  const all: Array<{
+    id: number;
+    eventId: number | string;
+    eventTitle: string;
+    eventSlug: string;
+    rating: number;
+    comment: string;
+    userName: string;
+    createdAt?: string;
+  }> = [];
+
+  for (const e of store) {
+    if (e.reviews && e.reviews.length > 0) {
+      for (const r of e.reviews) {
+        all.push({
+          id: r.id,
+          eventId: e.id,
+          eventTitle: e.title,
+          eventSlug: e.slug,
+          rating: r.rating,
+          comment: r.comment,
+          userName: r.userName || (r.user as any)?.username || "Attendee",
+          createdAt: r.createdAt
+        });
+      }
+    }
+  }
+  return all;
+}
+
+export async function deleteReview(eventId: number | string, reviewId: number | string): Promise<boolean> {
+  const store = getStore();
+  const event = store.find(e => String(e.id) === String(eventId) || e.documentId === String(eventId));
+  if (!event || !event.reviews) return false;
+  const idx = event.reviews.findIndex(r => String(r.id) === String(reviewId));
+  if (idx === -1) return false;
+  event.reviews.splice(idx, 1);
+  return true;
 }

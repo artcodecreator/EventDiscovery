@@ -424,31 +424,35 @@ export function UserDashboardClient({
                 <div className="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
                   <h5 className="fw-bold mb-3">Recent Account Actions</h5>
                   <div className="list-group list-group-flush">
-                    <div className="list-group-item px-0 py-3 d-flex align-items-center gap-3">
-                      <div className="stat-icon-wrapper bg-success-subtle text-success rounded-circle" style={{ width: "40px", height: "40px" }}>
-                        <i className="fa-solid fa-ticket"></i>
+                    {rsvps.map(r => (
+                      <div className="list-group-item px-0 py-3 d-flex align-items-center gap-3" key={`act-r-${r.id}`}>
+                        <div className="stat-icon-wrapper bg-success-subtle text-success rounded-circle" style={{ width: "40px", height: "40px" }}>
+                          <i className="fa-solid fa-ticket"></i>
+                        </div>
+                        <div>
+                          <div className="fw-semibold text-dark">Confirmed pass registration ({r.ticketsCount || 1} attendee{r.ticketsCount > 1 ? "s" : ""}) for {r.event?.title}</div>
+                          <div className="text-muted small">{r.event?.venue || r.event?.city} &bull; {r.event?.date || "Upcoming"}</div>
+                        </div>
                       </div>
-                      <div>
-                        <div className="fw-semibold text-dark">Confirmed pass registration for Pakistan AI Summit 2026</div>
-                        <div className="text-muted small">Expo Centre, Lahore &bull; 2 hours ago</div>
+                    ))}
+                    {favorites.map(f => (
+                      <div className="list-group-item px-0 py-3 d-flex align-items-center gap-3" key={`act-f-${f.id}`}>
+                        <div className="stat-icon-wrapper bg-danger-subtle text-danger rounded-circle" style={{ width: "40px", height: "40px" }}>
+                          <i className="fa-solid fa-heart"></i>
+                        </div>
+                        <div>
+                          <div className="fw-semibold text-dark">Added {f.event?.title} to saved bookmarks</div>
+                          <div className="text-muted small">{f.event?.city} &bull; {f.event?.category}</div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="list-group-item px-0 py-3 d-flex align-items-center gap-3">
-                      <div className="stat-icon-wrapper bg-danger-subtle text-danger rounded-circle" style={{ width: "40px", height: "40px" }}>
-                        <i className="fa-solid fa-heart"></i>
-                      </div>
-                      <div>
-                        <div className="fw-semibold text-dark">Added Coke Studio Live Concert to Bookmarks</div>
-                        <div className="text-muted small">Alhamra Arts Council &bull; 1 day ago</div>
-                      </div>
-                    </div>
+                    ))}
                     <div className="list-group-item px-0 py-3 d-flex align-items-center gap-3">
                       <div className="stat-icon-wrapper bg-info-subtle text-info rounded-circle" style={{ width: "40px", height: "40px" }}>
                         <i className="fa-solid fa-user-check"></i>
                       </div>
                       <div>
-                        <div className="fw-semibold text-dark">Account signed in via verified session</div>
-                        <div className="text-muted small">Lahore, Pakistan &bull; Today</div>
+                        <div className="fw-semibold text-dark">Verified session active for {user.name || user.email}</div>
+                        <div className="text-muted small">{profileData.city || "Pakistan"} &bull; Today</div>
                       </div>
                     </div>
                   </div>

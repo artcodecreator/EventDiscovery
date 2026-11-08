@@ -43,15 +43,19 @@ export async function POST(request: Request) {
 
   if (!(await approvedEventExists(eventId))) return notFoundJson("Event not found.");
 
-  const result = await toggleRsvp(session.user.id || "1", eventId, ticketsCount);
-  return NextResponse.json({
-    data: {
-      success: true,
-      active: result.active,
-      ticketsCount: result.ticketsCount,
-      message: result.active ? "Pass booked successfully!" : "Pass cancelled."
-    }
-  });
+  try {
+    const result = await toggleRsvp(session.user.id || "1", eventId, ticketsCount);
+    return NextResponse.json({
+      data: {
+        success: true,
+        active: result.active,
+        ticketsCount: result.ticketsCount,
+        message: result.active ? "Pass booked successfully!" : "Pass cancelled."
+      }
+    });
+  } catch (err: any) {
+    return badRequest(err?.message || "Could not reserve pass.");
+  }
 }
 
 export async function DELETE(request: Request) {

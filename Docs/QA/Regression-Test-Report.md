@@ -4,7 +4,8 @@
 Following the remediation of security vulnerabilities, access control loopholes, and TypeScript build errors, a complete regression test cycle was conducted to ensure that zero existing features or user workflows were broken.
 
 - **Baseline Test Run**: 72 test cases, 35 passed, 37 failed (before fixes).
-- **Post-Fix Regression Run (Run 4)**: 72 test cases, **71 passed, 0 failed, 1 documented todo**.
+- **Post-Fix Regression Run (Run 4)**: 72 test cases, 71 passed, 0 failed, 1 documented todo.
+- **Full Implementation & Integration Test Run (Run 5)**: **82 test cases across 13 test suites**, **81 passed, 0 failed, 1 documented todo**.
 - **Production Build Check**: 22 / 22 routes compiled successfully with 0 errors.
 - **Static Type Check (`tsc --noEmit`)**: 0 errors.
 
@@ -100,7 +101,27 @@ Following the remediation of security vulnerabilities, access control loopholes,
   ✔ API errors do not leak stack traces (203ms)
 ✔ Security headers & information disclosure (870ms)
 
-Total Tests: 72 | Passed: 71 | Failed: 0 | Todo: 1
+  ✔ anonymous / user cannot access admin categories API (331ms)
+  ✔ admin can list, create, update, and delete categories (470ms)
+  ✔ deleting category with assigned events is blocked with 400 (206ms)
+✔ Admin Category Management (1008ms)
+
+  ✔ anonymous / user cannot PATCH admin events (260ms)
+  ✔ admin can update event details via PATCH (288ms)
+✔ Admin Event Management (In-Dashboard Edit) (549ms)
+
+  ✔ anonymous / user cannot access admin users endpoint (213ms)
+  ✔ admin can list users, update status/role, and delete non-protected accounts (395ms)
+✔ Admin User Management & RBAC Protection (608ms)
+
+  ✔ anonymous / user cannot access review moderation (371ms)
+  ✔ admin can list all reviews and moderate/delete a review (533ms)
+✔ Admin Review Moderation (905ms)
+
+  ✔ booking over event capacity is rejected with 400 (475ms)
+✔ Seating Capacity Overbooking Guard (476ms)
+
+Total Tests: 82 | Suites: 13 | Passed: 81 | Failed: 0 | Todo: 1
 ```
 
 ---
@@ -119,11 +140,15 @@ Total Tests: 72 | Passed: 71 | Failed: 0 | Todo: 1
 - **Validation**: Proposing an event at `/submit-event` stores it in the `pending` queue. Super Admin logs in, reviews the submission at `/admin/dashboard`, and approves it. The event immediately populates the public catalog and interactive map pins.
 - **Regression Outcome**: 🟢 Zero Regressions.
 
-### 3.4 Star Reviews & Community Testimonials
-- **Validation**: Submitting a 1-5 star review with comments works smoothly; HTML in comments is safely rendered without script execution risks.
+### 3.4 Star Reviews & Community Moderation
+- **Validation**: Submitting a 1-5 star review with comments works smoothly; HTML in comments is safely rendered without script execution risks. Super Admin can review all platform comments and moderate inappropriate submissions in real-time.
+- **Regression Outcome**: 🟢 Zero Regressions.
+
+### 3.5 Category & User Management
+- **Validation**: Admin category CRUD tab with event association dependency protection, user status and role toggles with super admin account protection, and real-time attendee CSV exports.
 - **Regression Outcome**: 🟢 Zero Regressions.
 
 ---
 
 ## 4. Conclusion
-The regression test cycle confirms that all fixes applied to the system are stable, targeted, and preserve 100% of the approved platform behavior, user experience, and architecture.
+The regression test cycle confirms that all fixes and features applied to the system are stable, targeted, and preserve 100% of the approved platform behavior, user experience, and architecture.
