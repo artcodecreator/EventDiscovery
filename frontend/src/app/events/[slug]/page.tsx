@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { auth } from "@/auth";
 import { getEvents, getEventBySlug } from "@/lib/events";
 import { EventDetailClient } from "@/components/event-detail-client";
 
@@ -14,6 +15,14 @@ export default async function EventDetailPage({
 
   if (!event) {
     notFound();
+  }
+
+  // Only approved events are public. Pending/rejected submissions are previewable by admins only.
+  if ((event.status ?? "approved") !== "approved") {
+    const session = await auth();
+    if (session?.user?.role !== "admin") {
+      notFound();
+    }
   }
 
   const allEvents = await getEvents();

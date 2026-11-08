@@ -1,14 +1,17 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { toggleFavorite } from "@/lib/events";
+import { toggleFavorite, getEventById } from "@/lib/events";
+import { readJsonObject, parseEventId, badRequest, notFoundJson } from "@/lib/api-guards";
 
 export async function POST(request: Request) {
   const session = await auth();
   if (!session?.user) return NextResponse.json({ error: "Sign in required to bookmark events." }, { status: 401 });
 
-  const body = await request.json();
-  const eventId = body.eventId || body.eventDocumentId || body.documentId || body.id;
-  if (!eventId) return NextResponse.json({ error: "Event ID required" }, { status: 400 });
+  const body = await readJsonObject(request);
+  if (!body) return badRequest("Invalid request body.");
+
+  const eventId = parseEventId(body.eventId || body.eventDocumentId || body.documentId || body.id);
+  if (eventId === null) return badRequest("Event ID required");
 
   const base = process.env.STRAPI_URL;
   if (base && session.strapiToken && session.strapiToken !== "demo-jwt-token") {
@@ -29,6 +32,9 @@ export async function POST(request: Request) {
       // fallback
     }
   }
+
+  const event = await getEventById(eventId);
+  if (!event || (event.status ?? "approved") !== "approved") return notFoundJson("Event not found.");
 
   const result = await toggleFavorite(session.user.id || "1", eventId);
   return NextResponse.json({

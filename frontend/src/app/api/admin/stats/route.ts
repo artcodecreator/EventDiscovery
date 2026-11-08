@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
 import { getAdminStats } from "@/lib/events";
+import { requireAdmin } from "@/lib/api-guards";
 
 export async function GET() {
-  const session = await auth();
-  if (!session?.user || session.user.role !== "admin") {
-    // Return stats for demo/admin
-  }
+  const guard = await requireAdmin();
+  if ("response" in guard) return guard.response;
+
   const stats = await getAdminStats();
   return NextResponse.json({ data: stats });
 }

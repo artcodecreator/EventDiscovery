@@ -1,16 +1,25 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { toggleRsvp } from "@/lib/events";
+import { toggleRsvp, cancelRsvp, getEventById } from "@/lib/events";
+import { readJsonObject, parseEventId, parseTicketsCount, badRequest, notFoundJson } from "@/lib/api-guards";
+
+async function approvedEventExists(id: string | number) {
+  const event = await getEventById(id);
+  return Boolean(event && (event.status ?? "approved") === "approved");
+}
 
 export async function POST(request: Request) {
   const session = await auth();
   if (!session?.user) return NextResponse.json({ error: "Sign in required to get passes." }, { status: 401 });
 
-  const body = await request.json();
-  const eventId = body.eventId || body.eventDocumentId || body.documentId || body.id;
-  const ticketsCount = body.ticketsCount || 1;
+  const body = await readJsonObject(request);
+  if (!body) return badRequest("Invalid request body.");
 
-  if (!eventId) return NextResponse.json({ error: "Event ID required" }, { status: 400 });
+  const eventId = parseEventId(body.eventId || body.eventDocumentId || body.documentId || body.id);
+  if (eventId === null) return badRequest("Event ID required");
+
+  const ticketsCount = parseTicketsCount(body.ticketsCount);
+  if (ticketsCount === null) return badRequest("Tickets must be a whole number between 1 and 10.");
 
   const base = process.env.STRAPI_URL;
   if (base && session.strapiToken && session.strapiToken !== "demo-jwt-token") {
@@ -32,6 +41,8 @@ export async function POST(request: Request) {
     }
   }
 
+  if (!(await approvedEventExists(eventId))) return notFoundJson("Event not found.");
+
   const result = await toggleRsvp(session.user.id || "1", eventId, ticketsCount);
   return NextResponse.json({
     data: {
@@ -47,10 +58,13 @@ export async function DELETE(request: Request) {
   const session = await auth();
   if (!session?.user) return NextResponse.json({ error: "Sign in required." }, { status: 401 });
 
-  const body = await request.json();
-  const eventId = body.eventId || body.eventDocumentId || body.id;
-  if (!eventId) return NextResponse.json({ error: "Event ID required" }, { status: 400 });
+  const body = await readJsonObject(request);
+  if (!body) return badRequest("Invalid request body.");
 
-  const result = await toggleRsvp(session.user.id || "1", eventId);
+  const eventId = parseEventId(body.eventId || body.eventDocumentId || body.id);
+  if (eventId === null) return badRequest("Event ID required");
+
+  // DELETE must only ever cancel an existing pass (never create one).
+  await cancelRsvp(session.user.id || "1", eventId);
   return NextResponse.json({ data: { success: true, active: false, message: "Pass cancelled." } });
 }

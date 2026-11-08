@@ -653,7 +653,8 @@ export async function getEvents(options: { includePending?: boolean; category?: 
   }
 
   if (items.length === 0) {
-    items = JSON.parse(JSON.stringify(getStore()));
+    // Soft-deleted events must never be returned, not even to admins.
+    items = (JSON.parse(JSON.stringify(getStore())) as EventItem[]).filter(e => e.status !== "deleted");
     if (!options.includePending) {
       items = items.filter(e => e.status !== "pending" && e.status !== "rejected" && e.status !== "deleted");
     }
@@ -726,7 +727,9 @@ export async function createEventSubmission(payload: any): Promise<EventItem> {
   const store = getStore();
   const cat = categories.find(c => String(c.id) === String(payload.category_id) || c.slug === payload.categorySlug || c.name === payload.category) || categories[0];
   const newId = store.length ? Math.max(...store.map(e => Number(e.id) || 0)) + 1 : 1;
-  const slug = payload.slug || payload.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const baseSlug = (String(payload.title).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")) || `event-${newId}`;
+  // Slugs must be unique because event detail URLs are resolved by slug.
+  const slug = store.some(e => e.slug === baseSlug) ? `${baseSlug}-${newId}` : baseSlug;
 
   const newEvent: EventItem = {
     id: newId,
@@ -867,6 +870,17 @@ export async function toggleRsvp(userId: string, eventId: number | string, ticke
     if (event) event.rsvpCount = (event.rsvpCount || 0) + ticketsCount;
     return { active: true, ticketsCount };
   }
+}
+
+/** Cancels an existing pass. Unlike toggleRsvp it never creates a booking. */
+export async function cancelRsvp(userId: string, eventId: number | string) {
+  const rsvps = getRsvpsStore();
+  const idx = rsvps.findIndex(r => r.userId === userId && String(r.eventId) === String(eventId));
+  if (idx === -1) return { cancelled: false };
+  const [removed] = rsvps.splice(idx, 1);
+  const event = getStore().find(e => String(e.id) === String(eventId) || e.documentId === String(eventId));
+  if (event) event.rsvpCount = Math.max(0, (event.rsvpCount || 0) - (removed.ticketsCount || 1));
+  return { cancelled: true };
 }
 
 export async function getUserFavorites(userId: string) {

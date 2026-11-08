@@ -39,7 +39,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" }
       },
-      async authorize(credentials) {
+      async authorize(credentials: any) {
         const parsed = credentialsSchema.safeParse(credentials);
         if (!parsed.success) return null;
 
@@ -71,7 +71,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           }
         }
 
-        // Demo user check fallback
+        // Demo user check fallback (documented demo accounts).
+        // Set DISABLE_DEMO_USERS=true in real deployments to turn the built-in accounts off.
+        if (process.env.DISABLE_DEMO_USERS === "true") return null;
         const demo = DEMO_USERS.find(
           u => u.email.toLowerCase() === email.toLowerCase() && u.password === password
         );
@@ -90,14 +92,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     })
   ],
   callbacks: {
-    jwt({ token, user }) {
+    jwt({ token, user }: { token: any; user?: any }) {
       if (user) {
         token.strapiToken = (user as any).strapiToken;
         token.role = (user as any).role;
       }
       return token;
     },
-    session({ session, token }) {
+    session({ session, token }: { session: any; token: any }) {
       session.strapiToken = typeof token.strapiToken === "string" ? token.strapiToken : undefined;
       session.user.id = token.sub ?? "";
       session.user.role = typeof token.role === "string" ? token.role : undefined;

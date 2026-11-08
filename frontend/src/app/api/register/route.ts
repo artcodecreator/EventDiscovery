@@ -12,6 +12,10 @@ export async function POST(request:Request){
  let input;
  try{input=registration.safeParse(await request.json());}catch{return NextResponse.json({error:"Invalid request body."},{status:400});}
  if(!input.success)return NextResponse.json({error:"Please provide a valid name, email, password and city."},{status:400});
- const response=await fetch(`${base}/api/auth/local/register`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(input.data),cache:"no-store"});
- const data=await response.json();return NextResponse.json(data,{status:response.status});
+ try{
+  const response=await fetch(`${base}/api/auth/local/register`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(input.data),cache:"no-store"});
+  const data=await response.json();return NextResponse.json(data,{status:response.status});
+ }catch{
+  return NextResponse.json({error:"Account service is temporarily unavailable. Please try again later."},{status:503});
+ }
 }

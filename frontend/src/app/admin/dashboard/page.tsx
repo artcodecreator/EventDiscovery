@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { getEvents, getAdminStats } from "@/lib/events";
 import { AdminDashboardClient } from "@/components/admin-dashboard-client";
-import { initialUsers } from "@/app/api/admin/users/route";
+import { initialUsers } from "@/lib/users";
 
 export const dynamic = "force-dynamic";
 
