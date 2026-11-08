@@ -41,14 +41,35 @@ const allUsers = [
   }
 ];
 
-// Never expose credentials: passwords are stripped before any user data leaves the server.
-export const initialUsers: PublicUser[] = allUsers.map((u) => ({
-  id: u.id,
-  name: u.name,
-  email: u.email,
-  role: u.role,
-  city: u.city,
-  phone: u.phone,
-  bio: u.bio
-}));
+declare global {
+  var __USERS_STORE__: PublicUser[] | undefined;
+}
 
+export function getUsersStore(): PublicUser[] {
+  if (!globalThis.__USERS_STORE__) {
+    globalThis.__USERS_STORE__ = allUsers.map((u) => ({
+      id: u.id,
+      name: u.name,
+      email: u.email,
+      role: u.role,
+      city: u.city,
+      phone: u.phone,
+      bio: u.bio
+    }));
+  }
+  return globalThis.__USERS_STORE__;
+}
+
+// Never expose credentials: passwords are stripped before any user data leaves the server.
+export const initialUsers: PublicUser[] = getUsersStore();
+
+export function updateUserProfile(identifier: string, data: Partial<PublicUser>): PublicUser | null {
+  const users = getUsersStore();
+  const user = users.find(u => u.id === identifier || u.email.toLowerCase() === identifier.toLowerCase());
+  if (!user) return null;
+  if (data.name) user.name = data.name;
+  if (data.city) user.city = data.city;
+  if (data.phone) user.phone = data.phone;
+  if (data.bio !== undefined) user.bio = data.bio;
+  return user;
+}
