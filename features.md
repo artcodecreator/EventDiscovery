@@ -17,17 +17,17 @@ This document presents a comprehensive, module-by-module audit of the **EventDis
 | Module | SRS Reference | User Side Status | Admin Side Status | Overall Status |
 | :--- | :--- | :--- | :--- | :--- |
 | **1. Event Discovery & Geo-Map** | FR-01, FR-02, FR-06 | 🟢 Complete | 🟢 Complete | **100% Implemented** |
-| **2. Search & Filtering** | FR-03, FR-08, FR-24 | 🟢 Complete | 🟡 Partial | **85% Implemented** |
+| **2. Search & Filtering** | FR-03, FR-08, FR-24 | 🟢 Complete | 🟢 Complete | **100% Implemented** |
 | **3. Event Details & Agenda** | FR-04, FR-05, FR-09 | 🟢 Complete | 🟢 Complete | **100% Implemented** |
-| **4. Authentication & RBAC** | FR-11, FR-12, FR-13 | 🟢 Complete | 🟢 Complete | **95% Implemented** |
-| **5. RSVP & Digital Pass Wallet** | FR-14, FR-27 | 🟢 Complete | 🟡 Partial | **80% Implemented** |
+| **4. Authentication & RBAC** | FR-11, FR-12, FR-13 | 🟢 Complete | 🟢 Complete | **100% Implemented** |
+| **5. RSVP & Digital Pass Wallet** | FR-14, FR-27 | 🟢 Complete | 🟢 Complete (Capacity Guard) | **95% Implemented** |
 | **6. Favorites & Bookmarks** | FR-15, FR-27 | 🟢 Complete | N/A (User-only) | **100% Implemented** |
-| **7. Reviews & Ratings** | FR-16 | 🟢 Complete | 🔴 Missing | **60% Implemented** |
-| **8. Event Proposal & Moderation** | FR-17, FR-18, FR-25 | 🟢 Complete | 🟢 Complete | **95% Implemented** |
-| **9. Master Events Management** | FR-21 | 🟢 Complete | 🟡 Partial (No Edit) | **75% Implemented** |
-| **10. Categories Management** | FR-20, FR-28 | 🟢 Complete (Read-only) | 🔴 Missing in UI | **40% Implemented** |
-| **11. User Management** | FR-19, FR-22 | 🟢 Complete | 🟡 Partial (Read-only) | **65% Implemented** |
-| **12. Reports & Analytics** | FR-14, FR-23 | N/A (Admin-only) | 🟡 Partial (KPIs only) | **50% Implemented** |
+| **7. Reviews & Ratings** | FR-16 | 🟢 Complete | 🟢 Complete (Moderation Tab) | **100% Implemented** |
+| **8. Event Proposal & Moderation** | FR-17, FR-18, FR-25 | 🟢 Complete | 🟢 Complete | **100% Implemented** |
+| **9. Master Events Management** | FR-21 | 🟢 Complete | 🟢 Complete (In-Dashboard Edit) | **100% Implemented** |
+| **10. Categories Management** | FR-20, FR-28 | 🟢 Complete | 🟢 Complete (Full CRUD) | **100% Implemented** |
+| **11. User Management** | FR-19, FR-22 | 🟢 Complete | 🟢 Complete (Role & Status Controls) | **100% Implemented** |
+| **12. Reports & Analytics** | FR-14, FR-23 | N/A (Admin-only) | 🟢 Complete (KPIs + CSV Export) | **85% Implemented** |
 | **13. Notification System** | FR-12 (SRS) | 🟡 In-App Toasts only | 🔴 Missing Center | **35% Implemented** |
 
 ---
